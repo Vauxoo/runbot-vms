@@ -130,3 +130,9 @@ How to install runbot_travis2docker module from scratch
 11. Configure setting of runbot
 
   - Open in browser http://YOUR_DNS/web and go to menu:settings/runbot and set your values.
+
+12. Configuring your first repository.
+
+  - The repository should look like this one:
+
+![](http://screenshots.vauxoo.com/oem/fc1fe0-1042x619.png)
