@@ -1,5 +1,5 @@
 
-*****Version**=0.0.1
+*****Version**=0.0.2
 
 Our Runbot Instance configuration files for deployments... (No Source here review the readme)
 
@@ -77,7 +77,7 @@ How to install runbot_travis2docker module from scratch
 
   ```
   upstream runbot {
-      server 127.0.0.1:8080 weight=1 max_fails=3 fail_timeout=200m;
+      server 127.0.0.2:8080 weight=1 max_fails=3 fail_timeout=200m;
   }
   server {
       listen 80;
