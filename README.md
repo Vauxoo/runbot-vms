@@ -4,10 +4,10 @@ Version=0.0.2
 Our Runbot Instance configuration files for deployments... (No Source here
 review the readme)
 
-TODO: MOVE THIS CONFIGURATION STEPS TO ANSIBLE.
+This installation instructions are to be done inside a blank Ubuntu 14.04
+machine it is not pretending to be done in an existent instance.
 
-How to install runbot_travis2docker module from scratch
----
+# Runbot instance with runbot docker based.
 
 1. Install docker
 2. Create OS "runbot" user.
@@ -17,14 +17,10 @@ How to install runbot_travis2docker module from scratch
   su - runbot
   ```
 
-3. Clone all repositories
+3. Clone this repository (it will take a while depending of your internet connection).
 
   ```bash
-  mkdir -p ~/instance
-  git clone https://github.com/Vauxoo/runbot-addons.git -b 9.0 ~/instance/runbot-addons
-  git clone https://github.com/Vauxoo/odoo-extra.git -b 9.0 ~/instance/odoo-extra
-  git clone https://github.com/Vauxoo/runbot.git -b 9.0 ~/instance/odoo-extra
-  git clone https://github.com/odoo/odoo.git -b 9.0 ~/instance/odoo
+  git clone --recursive https://github.com/Vauxoo/runbot -b 9.0 ~/runbot
   ```
 
 4. As root install dependencies apt and pip packages
@@ -55,18 +51,20 @@ How to install runbot_travis2docker module from scratch
     && echo 'LANG="en_US.UTF-8"' > /etc/default/locale
   ```
 
-5. As root user install and configure postgresql
+5. You can use your own postgres as normal, this step is if you decide install
+   runbot in your virtual machine to be separated from your environment.
 
-  ```bash
-  apt-get install -y postgresql-9.3 postgresql-contrib-9.3 postgresql-common postgresql-server-dev-9.3
-  su - postgres -c "psql -c  \"CREATE ROLE runbot LOGIN PASSWORD 'runbotpwd' SUPERUSER INHERIT CREATEDB CREATEROLE;\""
-  
-  # Run as runbot user:
-  createdb runbot
-  ```
+  a. Inside the same machine from scratch.
+
+    ```bash
+    apt-get install -y postgresql-9.3 postgresql-contrib-9.3 postgresql-common postgresql-server-dev-9.3
+    su - postgres -c "psql -c  \"CREATE ROLE runbot LOGIN PASSWORD 'runbotpwd' SUPERUSER INHERIT CREATEDB CREATEROLE;\""
+    createdb runbot
+    ```
 
 6. As runbot user configure odoo and start it
 
+  TODO: Config File should come from a configurator.
   ```bash
   echo -e "[options]\naddons_path=${HOME}/instance/dependencies/runbot-addons,\n    ${HOME}/instance/dependencies/odoo-extra,\n    ${HOME}/instance/odoo/addons,\n    ${HOME}/instance/odoo/openerp/addons\ndb_name = runbot\ndbfilter = runbot" | tee -a ~/.openerp_serverrc
   ~/instance/odoo/odoo.py -i runbot_travis2docker --without-demo=all
@@ -74,7 +72,8 @@ How to install runbot_travis2docker module from scratch
 
 7. Configure nginx, dns and host
 
- - Create follow site configuration `/etc/nginx/sites-enabled/site-runbot.conf`
+  a. Create follow site configuration 
+  `/etc/nginx/sites-enabled/site-runbot.conf`
 
   ```
 	upstream runbot {
@@ -110,13 +109,13 @@ How to install runbot_travis2docker module from scratch
 	}
   ```
 
-  - Restart nginx server to load new site configuration
+  b. Restart nginx server to load new site configuration
 
   ```
   /etc/init.d/nginx restart
   ```
 
-  - Set the dns as hostname
+  c. Set the dns as hostname
 
   ```
   runbot.YOUR_DNS_HOST.com > /etc/hostname` or  `hostnamectl set-hostname runbot.YOUR_DNS_HOST.com`
@@ -124,9 +123,9 @@ How to install runbot_travis2docker module from scratch
 
 8. Configure ssh keys
 
- - Github require  `/home/runbot/.ssh/id_rsa` keys to clone private repositories more info
+  a.  Github requires  `/home/runbot/.ssh/id_rsa` keys to clone private repositories more info
    [here](https://help.github.com/articles/generating-an-ssh-key/)
- - Add to known hosts git servers
+  b. Add to known hosts git servers
 
   ```
   ssh-keyscan github.com > ${HOME}/.ssh/known_hosts && ssh-keyscan launchpad.net >> ${HOME}/.ssh/known_hosts && ssh-keyscan bitbucket.org >> ${HOME}/.ssh/known_hosts && ssh-keyscan gitlab.com >> ${HOME}/.ssh/known_hosts
@@ -158,16 +157,20 @@ How to install runbot_travis2docker module from scratch
 
 14. Set your key public in github.
 
-15. Para recuperar una BD y poder trabajar con una BD de producción:
+# Running:.
 
-  - Marcar como Disabled todos los repos.
+1. To work in an existent db for developers.
+
+  - Mark as disabled all repositories (tip, download a csv and import it again).
   - Actualizar a un token read todo, y no a un token write.
   - Cambiar los workers.
   - Si es necesaro revisa el puerto start para que sea por encima del puerto en el que estás corriendo Odoo.
   - Cambiar a tu dominio local.
   - Ahora SI puedes activar el cron dentro de cualquier repo para que lance TODOS.
 
-TODO:
+Updating from an old version:
+
+# Planned New Features::
 
   - Notas mentales para Mejoras.
     - job_10_test_base.txt -> docker build
