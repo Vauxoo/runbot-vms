@@ -136,3 +136,8 @@ How to install runbot_travis2docker module from scratch
   - The repository should look like this one:
 
 ![](http://screenshots.vauxoo.com/oem/fc1fe0-1042x619.png)
+
+13. Create your runbot ssh keys.
+
+14. Set your key public in github.
+
