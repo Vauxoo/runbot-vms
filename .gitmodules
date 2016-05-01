@@ -1,0 +1,9 @@
+[submodule "runbot-addons"]
+	path = runbot-addons
+	url = git@github.com:Vauxoo/runbot-addons.git
+[submodule "odoo-extra"]
+	path = odoo-extra
+	url = git@github.com:Vauxoo/odoo-extra.git
+[submodule "odoo"]
+	path = odoo
+	url = git@github.com:odoo/odoo.git

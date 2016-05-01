@@ -1,7 +1,8 @@
+Version=0.0.2
+---
 
-*****Version**=0.0.2
-
-Our Runbot Instance configuration files for deployments... (No Source here review the readme)
+Our Runbot Instance configuration files for deployments... (No Source here
+review the readme)
 
 TODO: MOVE THIS CONFIGURATION STEPS TO ANSIBLE.
 
@@ -19,10 +20,10 @@ How to install runbot_travis2docker module from scratch
 3. Clone all repositories
 
   ```bash
-  # Run as runbot user:
   mkdir -p ~/instance
-  git clone https://github.com/Vauxoo/runbot-addons.git -b 9.0 ~/instance/dependencies/runbot-addons
-  git clone https://github.com/Vauxoo/odoo-extra.git -b 9.0 ~/instance/dependencies/odoo-extra
+  git clone https://github.com/Vauxoo/runbot-addons.git -b 9.0 ~/instance/runbot-addons
+  git clone https://github.com/Vauxoo/odoo-extra.git -b 9.0 ~/instance/odoo-extra
+  git clone https://github.com/Vauxoo/runbot.git -b 9.0 ~/instance/odoo-extra
   git clone https://github.com/odoo/odoo.git -b 9.0 ~/instance/odoo
   ```
 
