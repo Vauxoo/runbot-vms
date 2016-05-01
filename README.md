@@ -9,7 +9,7 @@ machine it is not pretending to be done in an existent instance.
 
 # Runbot instance with runbot docker based.
 
-1. Install docker
+1. Install [docker](ihttps://docs.docker.com/engine/installation/linux/ubuntulinux/).
 2. Create OS "runbot" user.
 
   ```bash
