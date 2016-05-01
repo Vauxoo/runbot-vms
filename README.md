@@ -11,10 +11,10 @@ How to install runbot_travis2docker module from scratch
 1. Install docker
 2. Create OS "runbot" user.
 
-```bash
+  ```bash
   useradd -d /home/runbot -m -s /bin/bash -p runbotpwd runbot && usermod -aG docker runbot
   su - runbot
-```
+  ```
 
 3. Clone all repositories
 
@@ -76,21 +76,37 @@ How to install runbot_travis2docker module from scratch
  - Create follow site configuration `/etc/nginx/sites-enabled/site-runbot.conf`
 
   ```
-  upstream runbot {
-      server 127.0.0.2:8080 weight=1 max_fails=3 fail_timeout=200m;
-  }
-  server {
-      listen 80;
-      server_name ~^(.*)\.runbot\.YOUR_DNS_HOST\.com$ runbot.YOUR_DNS_HOST.com;
-      location / {
-          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-          proxy_set_header Host $host;
-          send_timeout 200m;
-          proxy_read_timeout 200m;
-          proxy_connect_timeout 200m;
-          proxy_pass    http://runbot;
-      }
-  }
+	upstream runbot {
+		server 127.0.0.1:8069 weight=1 max_fails=3 fail_timeout=200m;
+	}
+	server {
+		listen 80;
+		server_name runbot.example.com;
+		location / {
+			proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+			proxy_set_header Host $host;
+			send_timeout 200m;
+			proxy_read_timeout 200m;
+			proxy_connect_timeout 200m;
+			proxy_pass    http://runbot;
+		}
+	}
+
+	upstream runbot_instances {
+		server 127.0.0.1:8080 weight=1 max_fails=3 fail_timeout=200m;
+	}
+	server {
+		listen 80;
+		server_name ~^(.*)\.runbot\.vauxoo\.colima$;
+		location / {
+			proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+			proxy_set_header Host $host;
+			send_timeout 200m;
+			proxy_read_timeout 200m;
+			proxy_connect_timeout 200m;
+			proxy_pass    http://runbot_instances;
+		}
+	}
   ```
 
   - Restart nginx server to load new site configuration
@@ -135,9 +151,26 @@ How to install runbot_travis2docker module from scratch
 
   - The repository should look like this one:
 
-![](http://screenshots.vauxoo.com/oem/fc1fe0-1042x619.png)
+  - ![](http://screenshots.vauxoo.com/oem/fc1fe0-1042x619.png)
 
 13. Create your runbot ssh keys.
 
 14. Set your key public in github.
 
+15. Para recuperar una BD y poder trabajar con una BD de producción:
+
+  - Marcar como Disabled todos los repos.
+  - Actualizar a un token read todo, y no a un token write.
+  - Cambiar los workers.
+  - Si es necesaro revisa el puerto start para que sea por encima del puerto en el que estás corriendo Odoo.
+  - Cambiar a tu dominio local.
+  - Ahora SI puedes activar el cron dentro de cualquier repo para que lance TODOS.
+
+TODO:
+
+  - Notas mentales para Mejoras.
+    - job_10_test_base.txt -> docker build
+    - job_20_test_all.txt -> docker run
+      - Este es: el primer build que tenga El primer build que tenga "TESTS=1" en su dockerfile
+    - job_30_test_run.txt -> docker start (keep alive docker de mierda)
+  - Con data: https://github.com/vauxoo-dev/runbot_branch_remote_name_grp_feature2
