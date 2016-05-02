@@ -156,12 +156,16 @@ machine it is not pretending to be done in an existent instance.
 
 14. Set your key public in github.
 
-# Running:.
+# Running developer mode:.
   
-  ```
-  ~/instance/odoo/odoo.py -i runbot_travis2docker --without-demo=all
+  ```bash
+  $ ~/instance/odoo/odoo.py -i runbot_travis2docker --without-demo=all
 
   ```
+
+# Running as a service mode:.
+
+  - TODO: Running with supervisord.
 
 # To work in an existent db for developers.
 
