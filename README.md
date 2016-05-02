@@ -20,7 +20,7 @@ machine it is not pretending to be done in an existent instance.
 3. Clone this repository (it will take a while depending of your internet connection).
 
   ```bash
-  git clone --recursive https://github.com/Vauxoo/runbot -b 9.0 ~/runbot
+  git clone --recursive https://github.com/Vauxoo/runbot -b 9.0 ~/instance
   ```
 
 4. As root install dependencies apt and pip packages
@@ -67,7 +67,6 @@ machine it is not pretending to be done in an existent instance.
   TODO: Config File should come from a configurator.
   ```bash
   echo -e "[options]\naddons_path=${HOME}/instance/dependencies/runbot-addons,\n    ${HOME}/instance/dependencies/odoo-extra,\n    ${HOME}/instance/odoo/addons,\n    ${HOME}/instance/odoo/openerp/addons\ndb_name = runbot\ndbfilter = runbot" | tee -a ~/.openerp_serverrc
-  ~/instance/odoo/odoo.py -i runbot_travis2docker --without-demo=all
   ```
 
 7. Configure nginx, dns and host
@@ -158,15 +157,23 @@ machine it is not pretending to be done in an existent instance.
 14. Set your key public in github.
 
 # Running:.
+  
+  ```
+  ~/instance/odoo/odoo.py -i runbot_travis2docker --without-demo=all
 
-1. To work in an existent db for developers.
+  ```
 
-  - Mark as disabled all repositories (tip, download a csv and import it again).
+# To work in an existent db for developers.
+
+  - Mark as disabled all repositories (tip, download a csv and import it
+    again).
   - Actualizar a un token read todo, y no a un token write.
   - Cambiar los workers.
-  - Si es necesaro revisa el puerto start para que sea por encima del puerto en el que estás corriendo Odoo.
+  - Si es necesaro revisa el puerto start para que sea por encima del puerto en
+    el que estás corriendo Odoo.
   - Cambiar a tu dominio local.
-  - Ahora SI puedes activar el cron dentro de cualquier repo para que lance TODOS.
+  - Ahora SI puedes activar el cron dentro de cualquier repo para que lance
+    TODOS.
 
 Updating from an old version:
 
