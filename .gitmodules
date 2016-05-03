@@ -10,3 +10,6 @@
 [submodule "odoo-material"]
 	path = odoo-material
 	url = git@github.com:Vauxoo/odoo-material.git
+[submodule "server-tools"]
+	path = server-tools
+	url = git@github.com:Vauxoo/server-tools.git
