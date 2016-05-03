@@ -7,3 +7,6 @@
 [submodule "odoo"]
 	path = odoo
 	url = git@github.com:odoo/odoo.git
+[submodule "odoo-material"]
+	path = odoo-material
+	url = git@github.com:Vauxoo/odoo-material.git

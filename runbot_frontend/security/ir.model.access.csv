@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_runbot_frontend_runbot_frontend,runbot_frontend.runbot_frontend,model_runbot_frontend_runbot_frontend,,1,0,0,0

@@ -1,0 +1,59 @@
+<openerp>
+  <data>
+    <!-- explicit list view definition -->
+    <!--
+    <record model="ir.ui.view" id="runbot_frontend.list">
+      <field name="name">runbot_frontend list</field>
+      <field name="model">runbot_frontend.runbot_frontend</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </tree>
+      </field>
+    </record>
+    -->
+
+    <!-- actions opening views on models -->
+    <!--
+    <record model="ir.actions.act_window" id="runbot_frontend.action_window">
+      <field name="name">runbot_frontend window</field>
+      <field name="res_model">runbot_frontend.runbot_frontend</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    -->
+
+    <!-- server action to the one above -->
+    <!--
+    <record model="ir.actions.server" id="runbot_frontend.action_server">
+      <field name="name">runbot_frontend server</field>
+      <field name="model_id" ref="model_runbot_frontend_runbot_frontend"/>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": self._name,
+        }
+      </field>
+    </record>
+    -->
+
+    <!-- Top menu item -->
+    <!--
+    <menuitem name="runbot_frontend" id="runbot_frontend.menu_root"/>
+    -->
+    <!-- menu categories -->
+    <!--
+    <menuitem name="Menu 1" id="runbot_frontend.menu_1" parent="runbot_frontend.menu_root"/>
+    <menuitem name="Menu 2" id="runbot_frontend.menu_2" parent="runbot_frontend.menu_root"/>
+    -->
+    <!-- actions -->
+    <!--
+    <menuitem name="List" id="runbot_frontend.menu_1_list" parent="runbot_frontend.menu_1"
+              action="runbot_frontend.action_window"/>
+    <menuitem name="Server to list" id="runbot_frontend" parent="runbot_frontend.menu_2"
+              action="runbot_frontend.action_server"/>
+    -->
+  </data>
+</openerp>
