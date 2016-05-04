@@ -6,6 +6,7 @@
     'website': "http://www.yourcompany.com",
     'category': 'Runbot',
     'version': '0.1',
+    'application': True,
     'depends': [
         'runbot_travis2docker',
         'theme_material',
