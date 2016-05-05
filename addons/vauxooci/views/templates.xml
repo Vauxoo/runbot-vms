@@ -1,12 +1,51 @@
 <openerp>
     <data>
+        <template id="runbot.build_name">
+            <t t-if="bu['state']=='pending'"><i class="text-default fa fa-pause"/> pending</t>
+            <t t-if="bu['state']=='testing'"><i class="text-info fa fa-spinner fa-spin"/> testing <t t-esc="bu['job']"/> <small t-if="not hide_time"><t t-esc="bu['job_time']"/></small></t>
+            <t t-if="bu['result']=='ok'"><i class="text-success fa fa-thumbs-up"/><small t-if="not hide_time"> age <t t-esc="bu['job_age']"/> time <t t-esc="bu['job_time']"/></small></t>
+            <t t-if="bu['result']=='ko'"><i class="text-danger fa fa-thumbs-down"/><small t-if="not hide_time"> age <t t-esc="bu['job_age']"/> time <t t-esc="bu['job_time']"/></small></t>
+            <t t-if="bu['result']=='warn'"><i class="text-warning fa fa-warning"/><small t-if="not hide_time"> age <t t-esc="bu['job_age']"/> time <t t-esc="bu['job_time']"/></small></t>
+            <t t-if="bu['result']=='skipped'"><i class="text-danger fa fa-ban"/> skipped</t>
+            <t t-if="bu['result']=='killed'"><i class="text-danger fa fa-times"/> killed</t>
+            <t t-if="bu['server_match'] in ('default', 'fuzzy')">
+                <i class="text-warning fa fa-question-circle fa-fw"
+                   title="Server branch cannot be determined exactly. Please use naming convention '9.0-my-branch' to build with '9.0' server branch."/>
+            </t>
+        </template>
         <!-- TODO: Button to set the kill this and force rebuild with proper management.
              -->
         <template id="runbot.build_button">
-            <div t-attf-class="pull-right">
-                <div t-attf-class="btn-group {{klass}}">
-                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                        <t t-if="bu['state']=='running'"><i class="fa fa-sign-in"/> </t> <t t-if="bu['state']!='running'"><i class="fa fa-cog"/></t> <span class="caret"></span></button>
+            <div class="btn-group btn-group-sm">
+                <div class="btn-group">
+                    <button t-att-class="'btn btn-fab btn-fab-mini dropdown-toggle btn-'+klass" data-toggle="dropdown">
+                        <t t-if="bu['committer'] and bu['author'] == bu['committer']">
+                            <i class="material-icons">person</i>
+                        </t>
+                        <t t-if="bu['committer'] and bu['author'] != bu['committer']">
+                            <i class="material-icons">people</i>
+                        </t>
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li class="dropdown-header">Authors</li>
+                        <li class="disabled">
+                            <a href="#" t-id="bu['author']"><small>Author:</small><t t-esc="bu['author']"/></a>
+                        </li>
+                        <li class="disabled" t-if="bu['committer'] and bu['author'] != bu['committer']">
+                            <a href="#" t-id="bu['committer']"><small>Committed by:</small> <t t-esc="bu['committer']"/></a>
+                        </li>
+                        <li t-if="bu['state']!='testing' and bu['state']!='pending'" class="divider"></li>
+                        <li class="dropdown-header">Information</li>
+                        <li class="disabled"><a href="#">Runtime: <t t-esc="bu['job_time']"/>s</a></li>
+                        <li class="disabled"><a href="#">Port: <t t-esc="bu['port']"/></a></li>
+                        <li class="disabled"><a href="#">Age: <t t-esc="bu['job_age']"/></a></li>
+                    </ul>
+                </div>
+                <div class="btn-group">
+                    <button t-att-class="'btn btn-fab btn-fab-mini dropdown-toggle btn-'+klass" data-toggle="dropdown">
+                        <t t-if="bu['state']=='running'"><i class="material-icons">ondemand_video</i> </t> <t t-if="bu['state']!='running'"><i class="material-icons">settings</i></t> <span class="caret"></span>
+                    </button>
                     <ul class="dropdown-menu" role="menu">
                         <t t-if="bu['state']=='running'">
                             <li class="dropdown-header"><i class="fa fa-sign-in"></i> Connect</li>
@@ -25,6 +64,7 @@
                             <a href="#" class="runbot-rebuild" t-att-data-runbot-build="bu['id']">Rebuild <i class="fa fa-refresh"/></a>
                         </li>
                         <li class="dropdown-header"><i class="fa fa-github"/> Links</li>
+                        <li><a t-attf-href="/runbot/build/{{bu['id']}}"> Go to build</a></li>
                         <li><a t-attf-href="{{br['branch'].branch_url}}" target="_new" title="Branch or Pull">Code Review</a></li>
                         <li><a t-attf-href="https://{{repo.base}}/commit/{{bu['name']}}">Commit</a></li>
                         <li><a t-attf-href="https://{{repo.base}}/compare/{{br['branch'].branch_name}}">Compare</a></li>
@@ -32,13 +72,6 @@
                         <li t-if="bu['host']"><a t-attf-href="http://{{bu['host']}}/runbot/static/build/#{bu['real_dest']}/logs/job_10_test_base.txt">Image Build</a></li>
                         <li t-if="bu['host']"><a t-attf-href="http://{{bu['host']}}/runbot/static/build/#{bu['real_dest']}/logs/job_20_test_all.txt">Run Logs</a></li>
                         <li><a t-attf-href="/runbot/build/{{bu['id']}}">Resumed</a></li>
-                        <li t-if="bu['state']!='testing' and bu['state']!='pending'" class="divider"></li>
-                        <li class="dropdown-header"><i class="fa fa-info-circle"></i> Information</li>
-                        <li t-if="bu['state']!='testing' and bu['state']!='pending'" class="divider"></li>
-                        <li><a t-attf-href="/runbot/build/{{bu['id']}}"> Build</a></li>
-                        <li class="disabled"><a href="#">Runtime: <t t-esc="bu['job_time']"/>s</a></li>
-                        <li class="disabled"><a href="#">Port: <t t-esc="bu['port']"/></a></li>
-                        <li class="disabled"><a href="#">Age: <t t-esc="bu['job_age']"/></a></li>
                     </ul>
                 </div>
             </div>
@@ -70,40 +103,42 @@
         </template>
         <template id="vauxooci.search" name="Search template">
           <t t-if="repo">
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <form class="navbar-form" role="search" t-att-action="qu(search='')" method="get">
-                <div class="form-group">
-                    <input type="search" name="search" class="form-control" placeholder="Search" t-att-value="search"/>
-                    <button type="submit" class="btn btn-default">Search</button>
+            <form class="navbar-form navbar-left" role="search" t-att-action="qu(search='')" method="get">
+                <div class="form-group label-floating input-group">
+                    <span class="input-group-btn"><i class="material-icons">search</i></span>
+                    <input type="search" name="search" id="search0"
+                           t-att-value="search" class="form-control col-sm-8"/>
+                    <span class="help-block">criteria id, branch or pull requests</span>
                 </div>
             </form>
-          </div>
           </t>
         </template>
         <template id="vauxooci.dropdown_repositories" name="Dropdown for repositories">
           <t t-if="repo">
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <b style="font-size: 18px;">
-                  <t t-esc="repo.base"/>
-                </b>
-                <b class="caret"></b>
-              </a>
-              <ul class="dropdown-menu">
-                <t t-foreach='repos' t-as='re'>
-                    <li><a t-attf-href="/runbot/repo/{{slug(re)}}"><t t-esc="re.base"/></a></li>
-                </t>
-              </ul>
-            </li>
-            <t t-call="vauxooci.info"/>
+              <div class="btn-group btn-group-sm">
+                  <a href="#" class="btn btn-fab btn-info dropdown-toggle" data-toggle="dropdown">
+                      <i class="material-icons">more_vert</i>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <t t-foreach='repos' t-as='re'>
+                        <li><a t-attf-href="/runbot/repo/{{slug(re)}}"><t t-esc="re.base"/></a></li>
+                    </t>
+                  </ul>
+              </div>
           </t>
         </template>
         <template id="runbot.inherits_branch_in_menu" inherit_id="website.layout" name="Inherits Show top 5 branches in menu">
-            <xpath expr="//div[@class='navbar-header']" position="after">
+            <xpath expr="//div[@class='navbar-header']" position="replace">
                 <t t-call="vauxooci.search"/>
             </xpath>
+            <xpath expr="//ul[@id='top_menu']" position="after">
+                <t t-if="repo">
+                    <p class="navbar-text"> <b><t t-esc="repo.name"/></b></p>
+                    <t t-call="vauxooci.dropdown_repositories"/>
+                </t>
+            </xpath>
             <xpath expr="//t[@t-foreach=&quot;website.menu_id.child_id&quot;][@t-as=&quot;submenu&quot;]" position="replace">
-                <t t-call="vauxooci.dropdown_repositories"/>
+                <t t-call="vauxooci.info"/>
         <!--
                 <t t-if="repos" >
                      <t t-foreach="repos[:5]" t-as="re">
@@ -138,10 +173,49 @@
                 </div>
             </div>
         </template>
+        <template id="vauxooci.build_row" name="Row on Buld table">
+            <tr t-foreach="branches" t-as="br">
+            <td>
+                <i t-if="br['branch'].sticky" class="fa fa-star" style="color: #f0ad4e" />
+                <b t-esc="br['branch'].branch_name"/>
+                <small><t t-esc="br['builds'][0]['job_age']"/></small><br/>
+                <div class="btn-group btn-group-xs">
+                    <a t-attf-href="{{br['branch'].branch_url}}" class="btn btn-default btn-fab btn-fab-mini btn-xs" title="Branch where this source code is pulled from"><i class="material-icons md-18">code</i></a>
+                    <a t-attf-href="/runbot/#{repo.id}/#{br['branch'].branch_name}" class="btn btn-default btn-xs btn-fab btn-fab-mini" title="Quick Connect last built"><i class="material-icons md-18">call_made</i></a>
+                </div>
+            </td>
+            <t t-foreach="br['builds']" t-as="bu">
+                <t t-if="bu['state']=='pending'"><t t-set="klass">default</t></t>
+                <t t-if="bu['state']=='testing'"><t t-set="klass">info</t></t>
+                <t t-if="bu['state'] in ['running','done'] and bu['result'] == 'ko'"><t t-set="klass">danger</t></t>
+                <t t-if="bu['state'] in ['running','done'] and bu['result'] == 'warn'"><t t-set="klass">warning</t></t>
+                <t t-if="bu['state'] in ['running','done'] and bu['result'] == 'ok'"><t t-set="klass">success</t></t>
+                <t t-if="bu['state'] in ['running','done'] and bu['result'] == 'skipped'"><t t-set="klass">default</t></t>
+                <t t-if="bu['state'] in ['running','done'] and bu['result'] == 'killed'"><t t-set="klass">killed</t></t>
+                <td t-attf-class="{{klass}}">
+                    <t t-if="bu['subject']">
+                        <section t-esc="bu['subject']"/>
+                        <!--
+                        <section t-esc="bu['subject'][:32] + ('...' if
+                            bu['subject'][32:] else '') "
+                            t-att-title="bu['subject']"/>
+                        -->
+                    </t>
+                    <section><t t-esc="bu['dest']"/> on <t t-esc="bu['host']"/></section>
+                    <section t-call="runbot.build_name"/>
+                    <t t-id="bu['author']">
+                        <section class="text-center" style="margin-bottom: 0px; text-overflow: ellipsis;">
+                            <t t-call="runbot.build_button"/>
+                        </section>
+                    </t>
+                </td>
+            </t>
+            </tr>
+        </template>
         <template id="vauxooci.info" name="Info">
             <li>
                 <a type="button" data-toggle="modal" href="#" data-target="#info_modal">
-                   <i class="fa fa-info-circle"></i>
+                    <i class="material-icons">info</i>
                 </a>
             </li>
         </template>
@@ -149,57 +223,19 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class='col-md-12'>
-                        <div t-if="not repo" class="mb32">
-                            <h1>No Repository yet.</h1>
-                        </div>
-                        <table t-if="repo" class="table table-condensed table-bordered">
-                        <tr>
-                            <th>Branch</th>
-                            <td colspan="4" class="text-right">
-                                <t t-esc="repo.base"/>:
-                                <t t-esc="testing"/> testing,
-                                <t t-esc="running"/> running,
-                                <t t-esc="pending"/> pending.
-                            </td>
-
-                        </tr>
-                        <tr t-foreach="branches" t-as="br">
-                            <td>
-                                <i t-if="br['branch'].sticky" class="fa fa-star" style="color: #f0ad4e" />
-                                <b t-esc="br['branch'].branch_name"/>
-                                <small><t t-esc="br['builds'][0]['job_age']"/></small><br/>
-                                <div class="btn-group btn-group-xs">
-                                    <a t-attf-href="{{br['branch'].branch_url}}" class="btn btn-default btn-xs">Branch or pull <i class="fa fa-github"/></a>
-                                    <a t-attf-href="/runbot/#{repo.id}/#{br['branch'].branch_name}" class="btn btn-default btn-xs"><i class="fa fa-fast-forward" title="Quick Connect"/></a>
-                                </div>
-                            </td>
-                            <t t-foreach="br['builds']" t-as="bu">
-                                <t t-if="bu['state']=='pending'"><t t-set="klass">default</t></t>
-                                <t t-if="bu['state']=='testing'"><t t-set="klass">info</t></t>
-                                <t t-if="bu['state'] in ['running','done'] and bu['result'] == 'ko'"><t t-set="klass">danger</t></t>
-                                <t t-if="bu['state'] in ['running','done'] and bu['result'] == 'warn'"><t t-set="klass">warning</t></t>
-                                <t t-if="bu['state'] in ['running','done'] and bu['result'] == 'ok'"><t t-set="klass">success</t></t>
-                                <t t-if="bu['state'] in ['running','done'] and bu['result'] == 'skipped'"><t t-set="klass">default</t></t>
-                                <t t-if="bu['state'] in ['running','done'] and bu['result'] == 'killed'"><t t-set="klass">killed</t></t>
-                                <td t-attf-class="{{klass}}">
-                                   <t t-call="runbot.build_button"><t t-set="klass">btn-group</t></t>
-                                   <t t-if="bu['subject']">
-                                        <span t-esc="bu['subject'][:32] + ('...' if bu['subject'][32:] else '') " t-att-title="bu['subject']"/>
-                                         <br/>
-                                    </t>
-                                   <t t-id="bu['author']">
-                                        <t t-esc="bu['author']"/>
-                                        <t t-if="bu['committer'] and bu['author'] != bu['committer']" t-id="bu['committer']">
-                                            (<span class="octicon octicon-arrow-right"></span>&amp;nbsp;<t t-esc="bu['committer']"/>)
-                                        </t>
-                                        <br/>
-                                    </t>
-                                    <small><t t-esc="bu['dest']"/> on <t t-esc="bu['host']"/></small><br/>
-                                    <t t-call="runbot.build_name"/>
-                                </td>
-                            </t>
-                        </tr>
+                    <div class="panel panel-default">
+                        <!-- Default panel contents -->
+                        <t t-if="repo">
+                        </t>
+                        <t t-if="not repo">
+                            <div class="panel-body">
+                               <h1>No Repository yet.</h1>
+                            </div>
+                        </t>
+                        <table t-if="repo" class="table table-bordered table-responsive">
+                            <t t-call="vauxooci.build_row"/>
                         </table>
+                    </div>
                     </div>
                 </div>
             </div>
