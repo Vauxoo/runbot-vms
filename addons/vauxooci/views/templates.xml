@@ -174,8 +174,8 @@
             </div>
         </template>
         <template id="vauxooci.build_row" name="Row on Buld table">
-            <tr t-foreach="branches" t-as="br">
-            <td>
+            <section t-foreach="branches" t-as="br" class="row">
+            <div class="col-md-5 col-lg-5">
                 <i t-if="br['branch'].sticky" class="fa fa-star" style="color: #f0ad4e" />
                 <b t-esc="br['branch'].branch_name"/>
                 <small><t t-esc="br['builds'][0]['job_age']"/></small><br/>
@@ -183,7 +183,7 @@
                     <a t-attf-href="{{br['branch'].branch_url}}" class="btn btn-default btn-fab btn-fab-mini btn-xs" title="Branch where this source code is pulled from"><i class="material-icons md-18">code</i></a>
                     <a t-attf-href="/runbot/#{repo.id}/#{br['branch'].branch_name}" class="btn btn-default btn-xs btn-fab btn-fab-mini" title="Quick Connect last built"><i class="material-icons md-18">call_made</i></a>
                 </div>
-            </td>
+            </div>
             <t t-foreach="br['builds']" t-as="bu">
                 <t t-if="bu['state']=='pending'"><t t-set="klass">default</t></t>
                 <t t-if="bu['state']=='testing'"><t t-set="klass">info</t></t>
@@ -192,7 +192,7 @@
                 <t t-if="bu['state'] in ['running','done'] and bu['result'] == 'ok'"><t t-set="klass">success</t></t>
                 <t t-if="bu['state'] in ['running','done'] and bu['result'] == 'skipped'"><t t-set="klass">default</t></t>
                 <t t-if="bu['state'] in ['running','done'] and bu['result'] == 'killed'"><t t-set="klass">killed</t></t>
-                <td t-attf-class="{{klass}}">
+                <div t-attf-class="col-md-5 col-lg-5 {{klass}}">
                     <t t-if="bu['subject']">
                         <section t-esc="bu['subject']"/>
                         <!--
@@ -208,9 +208,9 @@
                             <t t-call="runbot.build_button"/>
                         </section>
                     </t>
-                </td>
+                </div>
             </t>
-            </tr>
+            </section>
         </template>
         <template id="vauxooci.info" name="Info">
             <li>
@@ -232,9 +232,7 @@
                                <h1>No Repository yet.</h1>
                             </div>
                         </t>
-                        <table t-if="repo" class="table table-bordered table-responsive">
-                            <t t-call="vauxooci.build_row"/>
-                        </table>
+                        <t t-call="vauxooci.build_row"/>
                     </div>
                     </div>
                 </div>
