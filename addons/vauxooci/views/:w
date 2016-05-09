@@ -237,32 +237,20 @@
         </template>
         <template id="vauxooci.build_row_xs" name="Row Header">
             <div t-attf-class="row row-full hidden-md hidden-lg hidden-sm" style="border-bottom: 1px solid #ccc; padding-bottom: 0px">
-                <div t-attf-class="col-xs-1 btn text-center btn-{{klass_p}} btn-raised">
-                    <div t-if="br['branch'].sticky">
-                        <i class="material-icons" style="color: #f0ad4e">star</i>
-                    </div>
-                    <div  t-if="not br['branch'].sticky">
-                        <i class="material-icons">call_merge</i>
-                    </div>
-                    <div class="btn-checked">
-                        <i class="material-icons">check_box_outline_blank</i>
-                        <i class="material-icons hidden">check_box</i>
-                    </div>
-                    <div t-if="br['builds'][0]['committer'] and br['branch'].sticky and br['builds'][0]['author'] != br['builds'][0]['committer']">
-                        <i class="material-icons">tag_faces</i>
-                    </div>
-                    <div t-if="br['builds'][0]['committer'] and br['branch'].sticky and br['builds'][0]['author'] == br['builds'][0]['committer']">
-                        <i class="material-icons">sentiment_very_dissatisfied</i>
-                    </div>
+                <div t-attf-class="col-xs-1 text-center {{klass_p}}">
+                    <i t-if="br['branch'].sticky" class="material-icons" style="color: #f0ad4e">star</i>
+                    <i t-if="not br['branch'].sticky" class="material-icons">call_merge</i>
+                    <i class="material-icons">check_box_outline_blank</i>
+                    <i class="material-icons">check_box</i>
+                    <t t-if="br['builds'][0]['committer'] and br['branch'].sticky and br['builds'][0]['author'] == br['builds'][0]['committer']">
+                    <i class="material-icons">sentiment_very_dissatisfied</i>
                 </div>
                 <div class="col-xs-11">
                     <div class="row">
                         <label class="label label-title-left">
+                            <t t-esc="br['builds'][0]['author']"/><br/>
                             <t t-if="br['builds'][0]['committer'] and br['builds'][0]['author'] != br['builds'][0]['committer']">
-                                <t t-esc="br['builds'][0]['author']"/>, <b>with</b> <t t-esc="br['builds'][0]['committer']"/>
-                            </t>
-                            <t t-if="br['builds'][0]['committer'] and br['builds'][0]['author'] == br['builds'][0]['committer']">
-                                <t t-esc="br['builds'][0]['author']"/>
+                                <t t-esc="br['builds'][0]['committer']"/>
                             </t>
                         </label>
                         <label class="label label-title-right">

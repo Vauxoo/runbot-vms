@@ -12,6 +12,8 @@
         'theme_material',
     ],
     'data': [
+        'views/assets.xml',
+        'views/layout.xml',
         'views/templates.xml',
     ],
     'demo': [
