@@ -1,51 +1,39 @@
 <openerp>
     <data>
         <template id="runbot.build_name">
-            <t t-set="klass_column" t-value="'col-md-8 col-sm-8 col-xs-8'"/>
+            <t t-set="klass_column" t-value="'build-title text-right'"/>
             <div t-attf-class="{{klass_column}}" t-if="bu['state']=='pending'">
-                <i class="material-icons">pause</i>
-                <h5><t t-esc="bu['dest']"/></h5>
+                <h5><i class="material-icons">pause</i> <t t-esc="bu['dest']"/></h5>
             </div>
             <div t-attf-class="{{klass_column}}" t-if="bu['state']=='testing'">
-                <i class="material-icons">cached</i>
-                <h5><t t-esc="bu['dest']"/></h5>
+                <h5><i class="material-icons">cached</i> <t t-esc="bu['dest']"/></h5>
             </div>
             <div t-attf-class="{{klass_column}}" t-if="bu['result']=='ok'">
-                <i class="material-icons">thumb_up</i>
-                <h5><t t-esc="bu['dest']"/></h5>
+                <h5><i class="material-icons">thumb_up</i> <t t-esc="bu['dest']"/></h5>
             </div>
             <div t-attf-class="{{klass_column}}" t-if="bu['result']=='ko'">
-                <i class="material-icons">bug_report</i>
-                <h5><t t-esc="bu['dest']"/></h5>
+                <h5><i class="material-icons">bug_report</i> <t t-esc="bu['dest']"/></h5>
             </div>
             <div t-attf-class="{{klass_column}}" t-if="bu['result']=='warn'">
-                <i class="material-icons">warning</i>
-                <h5><t t-esc="bu['dest']"/></h5>
+                <h5><i class="material-icons">warning</i> <t t-esc="bu['dest']"/></h5>
             </div>
             <div t-attf-class="{{klass_column}}" t-if="bu['result']=='skipped'">
-                <i class="material-icons">block</i>
-                <h5><t t-esc="bu['dest']"/></h5>
+                <h5><i class="material-icons">block</i> <t t-esc="bu['dest']"/></h5>
             </div>
             <div t-attf-class="{{klass_column}}" t-if="bu['result']=='killed'">
-                <i class="material-icons">sync_problem</i>
-                <h5><t t-esc="bu['dest']"/></h5>
+                <h5><i class="material-icons">sync_problem</i> <t t-esc="bu['dest']"/></h5>
             </div>
             <div t-attf-class="{{klass_column}}" t-if="not bu['result'] and not bu['state']=='testing'">
-                <i class="material-icons">error</i>
-                <h5><t t-esc="bu['dest']"/></h5>
+                <h5><i class="material-icons">error</i> <t t-esc="bu['dest']"/></h5>
             </div>
-            <t t-if="bu['server_match'] in ('default', 'fuzzy')">
-                <i class="text-warning fa fa-question-circle fa-fw"
-                   title="Server branch cannot be determined exactly. Please use naming convention '9.0-my-branch' to build with '9.0' server branch."/>
-            </t>
         </template>
         <!-- TODO: Button to set the kill this and force rebuild with proper management.
              -->
 
         <template id="runbot.build_button">
-            <div class="col-md-4">
+            <div class="btn-group-vertical">
             <div class="btn-group">
-                <button t-attf-class="btn btn-fab btn-fab-mini dropdown-toggle btn-{{ klass }}" data-toggle="dropdown">
+                <button t-attf-class="btn btn-raised dropdown-toggle btn-{{ klass }}" data-toggle="dropdown">
                     <t t-if="bu['committer'] and bu['author'] == bu['committer']">
                         <i class="material-icons">person</i>
                     </t>
@@ -70,7 +58,7 @@
                 </ul>
             </div>
             <div class="btn-group">
-                <button t-attf-class="btn btn-fab btn-fab-mini dropdown-toggle btn-{{klass}}" data-toggle="dropdown">
+                <button t-attf-class="btn btn-raised dropdown-toggle btn-{{klass}}" data-toggle="dropdown">
                     <t t-if="bu['state']=='running'"><i class="material-icons">ondemand_video</i> </t> <t t-if="bu['state']!='running'"><i class="material-icons">settings</i></t> <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu">
@@ -219,21 +207,37 @@
             </div>
         </template>
         <template id="vauxooci.build_body" name="Row on Buld table">
-            <div t-attf-class="panel panel-{{ klass }}">
-                <div class="panel-heading">
-                    <div class="row">
-                        <t t-call="runbot.build_name"/>
+                <div class="row">
+                    <div class="col-xs-1">
                         <t t-call="runbot.build_button"/>
                     </div>
+                    <div class="col-xs-10">
+                        <t t-call="runbot.build_name"/>
+                    </div>
                 </div>
-                <div class="panel-body">
-                    <p t-esc="bu['subject']"/>
+                <p>
+                    <b><i t-if="not br['branch'].sticky" class="material-icons">call_merge</i>
+                    <i t-if="br['branch'].sticky" class="material-icons" style="color: #f0ad4e">star</i>
+                    <t t-esc="br['branch'].branch_name"/> <t t-if="bu['state']=='running'">is</t><t t-if="bu['state']!='running'">was</t> <t t-esc="bu['state']"/></b>,  and It was authored by: <b><t t-esc="bu['author']"/></b>
+                    <t t-if="bu['committer'] and bu['author'] != bu['committer']">
+                    and committed by: <b><t t-esc="bu['committer']"/></b>
+                    <label class="label label-success">
+                        <i class="material-icons">sentiment_very_satisfied</i>
+                    </label>
+                    </t>
+                </p>
+                <p class="lead">
+                    <t t-if="br['builds'][0]['committer'] and br['branch'].sticky and br['builds'][0]['author'] == br['builds'][0]['committer']">
+                        <span class="label label-warning" title="Not good, author and commiter is the same, this should be reiviewed by somebody else.">
+                            <i class="material-icons">sentiment_very_dissatisfied</i>
+                        </span>
+                    </t><br/>
+                    <t class="lead" t-esc="bu['subject']"/>
+                </p>
+                <div class="text-right">
+                    <small t-if="not hide_time">Built <t t-esc="bu['job_age']"/> ago and took <t t-esc="bu['job_time']"/></small>
+                    <small><b> on </b><t t-esc="bu['host']"/></small>
                 </div>
-                <div class="panel-footer">
-                    <small t-if="not hide_time"> age <t t-esc="bu['job_age']"/> time <t t-esc="bu['job_time']"/></small>
-                    <small><b>built on </b><t t-esc="bu['host']"/></small>
-                </div>
-            </div>
         </template>
         <template id="vauxooci.build_row_xs" name="Row Header">
             <div t-attf-class="row row-full hidden-md hidden-lg hidden-sm" style="border-bottom: 1px solid #ccc; padding-bottom: 0px">
@@ -386,7 +390,7 @@
                     <t t-call="vauxooci.build_row_md"/>
                 </div>
                 <t t-call="vauxooci.build_row_xs"/>
-                <div class="row hidden" t-attf-id="branch{{br['branch'].id}}">
+                <div class="row row-full hidden" t-attf-id="branch{{br['branch'].id}}">
                     <t t-foreach="br['builds']" t-as="bu">
                         <t t-if="bu['state']=='pending'"><t t-set="klass">default</t></t>
                         <t t-if="bu['state']=='testing'"><t t-set="klass">info</t></t>
