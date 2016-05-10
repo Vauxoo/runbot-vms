@@ -45,31 +45,26 @@ body.vauxooci {
             background-color: @brand-primary;
             color: @white;
             border: 1px solid @white;
-            margin-left: -1px
         }
         &.success {
             background-color: @brand-success;
             color: @white;
             border: 1px solid @white;
-            margin-left: -1px
         }
         &.danger {
             background-color: @brand-danger;
             color: @white;
             border: 1px solid @white;
-            margin-left: -1px
         }
         &.warning {
             background-color: @brand-warning;
             color: @white;
             border: 1px solid @white;
-            margin-left: -1px
         }
         &.info {
             background-color: @brand-info;
             color: @white;
             border: 1px solid @white;
-            margin-left: -1px
         }
     }
     .fixed {
@@ -125,7 +120,6 @@ body.vauxooci {
     .row-full {
         &.row {
             display: table;
-            width: 100%;
             margin-right: 0;
             margin-left: 0;
             padding: 0 0 0 0;
@@ -135,6 +129,16 @@ body.vauxooci {
                 float: none;
                 display: table-cell;
                 vertical-align: middle;
+                padding-left: 0px;
+                padding-right: 0px;
+                &.col-padded {
+                    padding-left: 10px;
+                    padding-right: 10px;
+                }
+                @media (max-width: @screen-xs-max) {
+                    padding-left: 10px;
+                    padding-right: 10px;
+                }
             }
         }
         .label {
@@ -182,5 +186,22 @@ body.vauxooci {
     .jumbotron {
           background-color:#3f51b5;
           color: #ffffff
+    }
+    .btn-group-vertical {
+        &.btn-group-fit {
+            margin-right: 0px;
+            border-left-width: 0px;
+            margin-top: 0px;
+            margin-bottom: 0px;
+            margin-left: 0px;
+        }
+    }
+    .build-title, .build-footer, .build-body {
+       .row {
+            margin-left: 0px;
+            margin-right: 0px;
+            [class*="col-"] {
+            }
+        }
     }
 }

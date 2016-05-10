@@ -2,46 +2,45 @@
     <data>
         <template id="runbot.build_name">
             <t t-set="klass_column" t-value="'build-title text-right'"/>
-            <div t-attf-class="{{klass_column}}" t-if="bu['state']=='pending'">
-                <h5><i class="material-icons">pause</i> <t t-esc="bu['dest']"/></h5>
-            </div>
-            <div t-attf-class="{{klass_column}}" t-if="bu['state']=='testing'">
-                <h5><i class="material-icons">cached</i> <t t-esc="bu['dest']"/></h5>
-            </div>
-            <div t-attf-class="{{klass_column}}" t-if="bu['result']=='ok'">
-                <h5><i class="material-icons">thumb_up</i> <t t-esc="bu['dest']"/></h5>
-            </div>
-            <div t-attf-class="{{klass_column}}" t-if="bu['result']=='ko'">
-                <h5><i class="material-icons">bug_report</i> <t t-esc="bu['dest']"/></h5>
-            </div>
-            <div t-attf-class="{{klass_column}}" t-if="bu['result']=='warn'">
-                <h5><i class="material-icons">warning</i> <t t-esc="bu['dest']"/></h5>
-            </div>
-            <div t-attf-class="{{klass_column}}" t-if="bu['result']=='skipped'">
-                <h5><i class="material-icons">block</i> <t t-esc="bu['dest']"/></h5>
-            </div>
-            <div t-attf-class="{{klass_column}}" t-if="bu['result']=='killed'">
-                <h5><i class="material-icons">sync_problem</i> <t t-esc="bu['dest']"/></h5>
-            </div>
-            <div t-attf-class="{{klass_column}}" t-if="not bu['result'] and not bu['state']=='testing'">
-                <h5><i class="material-icons">error</i> <t t-esc="bu['dest']"/></h5>
-            </div>
+            <p t-attf-class="{{klass_column}}" t-if="bu['state']=='pending'">
+                <span><i class="material-icons">pause</i> <t t-esc="bu['dest']"/></span>
+            </p>
+            <p t-attf-class="{{klass_column}}" t-if="bu['state']=='testing'">
+                <span><i class="material-icons">cached</i> <t t-esc="bu['dest']"/></span>
+            </p>
+            <p t-attf-class="{{klass_column}}" t-if="bu['result']=='ok'">
+                <span><i class="material-icons">thumb_up</i> <t t-esc="bu['dest']"/></span>
+            </p>
+            <p t-attf-class="{{klass_column}}" t-if="bu['result']=='ko'">
+                <span><i class="material-icons">bug_report</i> <t t-esc="bu['dest']"/></span>
+            </p>
+            <p t-attf-class="{{klass_column}}" t-if="bu['result']=='warn'">
+                <span><i class="material-icons">warning</i> <t t-esc="bu['dest']"/></span>
+            </p>
+            <p t-attf-class="{{klass_column}}" t-if="bu['result']=='skipped'">
+                <span><i class="material-icons">block</i> <t t-esc="bu['dest']"/></span>
+            </p>
+            <p t-attf-class="{{klass_column}}" t-if="bu['result']=='killed'">
+                <span><i class="material-icons">sync_problem</i> <t t-esc="bu['dest']"/></span>
+            </p>
+            <p t-attf-class="{{klass_column}}" t-if="not bu['result'] and not bu['state']=='testing'">
+                <span><i class="material-icons">error</i> <t t-esc="bu['dest']"/></span>
+            </p>
+            <p class="text-right">
+                <small t-if="not hide_time">Built <t t-esc="bu['job_age']"/> ago and took <t t-esc="bu['job_time']"/></small>
+                <small><b> on </b><t t-esc="bu['host']"/></small>
+            </p>
         </template>
         <!-- TODO: Button to set the kill this and force rebuild with proper management.
              -->
 
         <template id="runbot.build_button">
-            <div class="btn-group-vertical">
+            <div class="btn-group btn-group-fit btn-build">
             <div class="btn-group">
-                <button t-attf-class="btn btn-raised dropdown-toggle btn-{{ klass }}" data-toggle="dropdown">
-                    <t t-if="bu['committer'] and bu['author'] == bu['committer']">
-                        <i class="material-icons">person</i>
-                    </t>
-                    <t t-if="bu['committer'] and bu['author'] != bu['committer']">
-                        <i class="material-icons">people</i>
-                    </t>
-                    <span class="caret"></span>
-                </button>
+                <div t-attf-class="btn btn-raised dropdown-toggle btn-{{klass}}" data-toggle="dropdown">
+                    <t t-if="bu['committer'] and bu['author'] == bu['committer']"><i class="material-icons">person</i></t>
+                    <t t-if="bu['committer'] and bu['author'] != bu['committer']"><i class="material-icons">people</i></t>
+                </div>
                 <ul class="dropdown-menu" role="menu">
                     <li class="dropdown-header">Authors</li>
                     <li class="disabled">
@@ -58,9 +57,10 @@
                 </ul>
             </div>
             <div class="btn-group">
-                <button t-attf-class="btn btn-raised dropdown-toggle btn-{{klass}}" data-toggle="dropdown">
-                    <t t-if="bu['state']=='running'"><i class="material-icons">ondemand_video</i> </t> <t t-if="bu['state']!='running'"><i class="material-icons">settings</i></t> <span class="caret"></span>
-                </button>
+                <div t-attf-class="btn btn-raised btn-{{klass}} dropdown-toggle" data-toggle="dropdown">
+                    <t t-if="bu['state']=='running'"><i class="material-icons">ondemand_video</i></t>
+                    <t t-if="bu['state']!='running'"><i class="material-icons">settings</i></t>
+                </div>
                 <ul class="dropdown-menu" role="menu">
                     <t t-if="bu['state']=='running'">
                         <li class="dropdown-header"><i class="fa fa-sign-in"></i> Connect</li>
@@ -207,15 +207,8 @@
             </div>
         </template>
         <template id="vauxooci.build_body" name="Row on Buld table">
-                <div class="row">
-                    <div class="col-xs-1">
-                        <t t-call="runbot.build_button"/>
-                    </div>
-                    <div class="col-xs-10">
-                        <t t-call="runbot.build_name"/>
-                    </div>
-                </div>
-                <p>
+            <div class="build-card">
+                <div class="build-title">
                     <b><i t-if="not br['branch'].sticky" class="material-icons">call_merge</i>
                     <i t-if="br['branch'].sticky" class="material-icons" style="color: #f0ad4e">star</i>
                     <t t-esc="br['branch'].branch_name"/> <t t-if="bu['state']=='running'">is</t><t t-if="bu['state']!='running'">was</t> <t t-esc="bu['state']"/></b>,  and It was authored by: <b><t t-esc="bu['author']"/></b>
@@ -225,19 +218,19 @@
                         <i class="material-icons">sentiment_very_satisfied</i>
                     </label>
                     </t>
-                </p>
-                <p class="lead">
                     <t t-if="br['builds'][0]['committer'] and br['branch'].sticky and br['builds'][0]['author'] == br['builds'][0]['committer']">
                         <span class="label label-warning" title="Not good, author and commiter is the same, this should be reiviewed by somebody else.">
                             <i class="material-icons">sentiment_very_dissatisfied</i>
                         </span>
-                    </t><br/>
-                    <t class="lead" t-esc="bu['subject']"/>
-                </p>
-                <div class="text-right">
-                    <small t-if="not hide_time">Built <t t-esc="bu['job_age']"/> ago and took <t t-esc="bu['job_time']"/></small>
-                    <small><b> on </b><t t-esc="bu['host']"/></small>
+                    </t>
                 </div>
+                <div class="build-body">
+                    <p class="lead">
+                        <t t-esc="bu['subject']"/>
+                    </p>
+                    <t t-call="runbot.build_name"/>
+                </div>
+            </div>
         </template>
         <template id="vauxooci.build_row_xs" name="Row Header">
             <div t-attf-class="row row-full hidden-md hidden-lg hidden-sm" style="border-bottom: 1px solid #ccc; padding-bottom: 0px">
