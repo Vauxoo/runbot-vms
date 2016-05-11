@@ -43,6 +43,40 @@
                 <small><b> on </b><t t-esc="bu['host']"/></small>
             </p>
         </template>
+
+        <template id="vauxooci.build_button">
+            <div class="btn-group-sm">
+                <a t-attf-class="btn btn-fab btn-{{klass}}">
+                    <t t-if="bu['committer'] and bu['author'] == bu['committer']"><i class="material-icons">person</i></t>
+                    <t t-if="bu['committer'] and bu['author'] != bu['committer']"><i class="material-icons">people</i></t>
+                </a>
+                <a t-attf-class="btn btn-fab btn-{{klass}}">
+                    <t t-if="bu['state']=='running'"><i class="material-icons">ondemand_video</i></t>
+                    <t t-if="bu['state']!='running'"><i class="material-icons">settings</i></t>
+                </a>
+                <t t-if="bu['state']=='running'">
+                    <a class="btn btn-fab" t-attf-href="http://{{bu['domain']}}/">Home</a>
+                    <a class="btn btn-fab" t-attf-href="http://{{bu['domain']}}/?db={{bu['real_dest']}}-all">All</a>
+                    <a class="btn btn-fab" t-attf-href="http://{{bu['domain']}}/?db={{bu['real_dest']}}-base">Base</a>
+                </t>
+                <t t-if="bu['result']=='skipped'">
+                    <a class="btn btn-fab runbot-rebuild" href="#" t-att-data-runbot-build="bu['id']">Force Build <i class="fa fa-level-up"></i></a>
+                </t>
+                <t t-if="bu['result']!='skipped' and bu['state']!='done'">
+                    <a href="#" class="runbot-force-kill btn btn-fab" title="TODO: backend">Kill</a>
+                </t>
+                <t t-if="bu['state'] in ['done','running'] and bu_index==0">
+                    <a href="#" class="runbot-rebuild btn btn-fab" t-att-data-runbot-build="bu['id']">Rebuild <i class="fa fa-refresh"/></a>
+                </t>
+                <a class="btn btn-fab" t-attf-href="/runbot/build/{{bu['id']}}"> Go to build</a>
+                <a class="btn btn-fab" t-attf-href="{{br['branch'].branch_url}}" target="_new" title="Branch or Pull">Code Review</a>
+                <a class="btn btn-fab" t-attf-href="https://{{repo.base}}/commit/{{bu['name']}}">Commit</a>
+                <a class="btn btn-fab" t-attf-href="https://{{repo.base}}/compare/{{br['branch'].branch_name}}">Compare</a>
+                <a class="btn btn-fab" t-attf-href="http://{{bu['host']}}/runbot/static/build/#{bu['real_dest']}/logs/job_10_test_base.txt">Image Build</a>
+                <a class="btn btn-fab" t-attf-href="http://{{bu['host']}}/runbot/static/build/#{bu['real_dest']}/logs/job_20_test_all.txt">Run Logs</a>
+                <a class="btn btn-fab" t-attf-href="/runbot/build/{{bu['id']}}">Resumed</a>
+            </div>
+        </template>
         <!-- TODO: Button to set the kill this and force rebuild with proper management.
              -->
 
@@ -219,7 +253,7 @@
             </div>
         </template>
         <template id="vauxooci.build_body" name="Row on Buld table">
-            <div class="build-card">
+            <div class="build-card" t-attf-data-build-id="{{bu['id']}}">
                 <div class="build-title">
                     <b><i t-if="not br['branch'].sticky" class="material-icons">call_merge</i>
                     <i t-if="br['branch'].sticky" class="material-icons" style="color: #f0ad4e">star</i>
