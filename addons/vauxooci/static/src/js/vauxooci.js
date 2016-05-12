@@ -1,7 +1,8 @@
 (function($) {
     "use strict";
-
     $(function() {
+        var controls = [];
+
         $('.vauxooci-display').click(function() {
 
             if ( $('#'+$(this).data('target-id')).hasClass( "hidden"  )  ) {
@@ -10,18 +11,50 @@
             }
             $('#'+$(this).data('target-id')).addClass('hidden');
         });
-        $('.build-card').click(function() {
-            var self = $(this);
+        $('.build-card').click(function(e) {
+            var self = $(this),
+                x = e.pageX,
+                y = e. pageY
+
+            if ($(window).width() < 900) {
+                x = 0;
+                y = 450;
+                console.log(x);
+                console.log(y)
+            }
+
+
+            // if there is any other button then delete it.
+            if ($('.btn-background')) {
+                $('.btn-background').remove();
+            }
+
+            // Bring the buttons alive
             $.ajax({
                 url: "/vauxooci/build_button/"+self.data('build-id'),
                 context: document.body
-            }).done(function(data) {
-                    var res = $(data).css({"position": "fixed",
-                                 "top": 0,
-                                 "left": 0,
-                             }).data('build-id',
-                                     self.data('build-id'));
+            })
+            .done(function(data) {
+                var res = $(data)
+                    .css({
+                        "position": "fixed",
+                        "top": y,
+                        "left": x,
+                        "z-index": 5000,
+                     })
+                    .data('build-id', self.data('build-id'));
+
+                var closebutton = res.find('.close'),
+                    closing = 1
+                closebutton.click(function(){
+                    res.remove()
+                });
+                if (closing == 1) {
+                    closing = 0;
+                }
+                if (closing != 1) {
                     res.appendTo($('body'));
+                }
             });
        });
     });
