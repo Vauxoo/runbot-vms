@@ -2,10 +2,19 @@
     "use strict";
     $(function() {
         var controls = [];
+        // Show/Hide the XS builds
+        $('.vauxooci-display-xs').click(function() {
 
+            if ( $('#'+$(this).data('target-id') ).hasClass( "hidden" ) ) {
+                $('#'+$(this).data('target-id')).removeClass('hidden');
+                return true
+            }
+            $('#'+$(this).data('target-id')).addClass('hidden');
+        });
+        // Show/Hide the MD-LG builds
         $('.vauxooci-display').click(function() {
 
-            if ( $('#'+$(this).data('target-id')).hasClass( "hidden"  )  ) {
+            if ( $('#'+$(this).data('target-id')).hasClass( "hidden" )) {
                 $('#'+$(this).data('target-id')).removeClass('hidden');
                 return true
             }
