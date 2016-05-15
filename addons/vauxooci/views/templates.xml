@@ -211,7 +211,7 @@
                 </a>
             </t>
             <t t-if="website.user_id != user_id">
-                <a href="#" class="btn btn-fab btn-info" t-att-title="user_id.name">
+                <a href="/my/home" class="btn btn-fab btn-info" t-att-title="user_id.name">
                     <img src="http://www.androidslots.co.uk/images/Example-of-an-avatar-illustration-297x300.png"
                         class="circle"/>
                 </a>
