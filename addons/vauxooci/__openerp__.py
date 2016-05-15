@@ -8,6 +8,7 @@
     'version': '0.1',
     'application': True,
     'depends': [
+        'mail',
         'runbot_travis2docker',
         'theme_material',
     ],
