@@ -474,11 +474,11 @@
                             <meta http-equiv="refresh" t-att-content="refresh"/>
                         </t>
                     </t>
-                    <t t-set="title">
-                        Repo:
-                        <t t-esc="repo.display_name"/>
-                    </t>
                     <t t-if="repo">
+                        <t t-set="title">
+                            Repo:
+                            <t t-esc="repo.display_name"/>
+                        </t>
                         <div class="jumbotron">
                             <div class="container">
                                 <h2 class="text-left">
@@ -500,7 +500,16 @@
                         <t t-call="vauxooci.builds_all"/>
                     </t>
                     <t t-if="not repo">
-                       <h1>No Repository yet.</h1>
+                        <div class="jumbotron">
+                            <div class="text-center">
+                                <h1>VauxooCI Just Installed.</h1>
+                                <h1><small>No repository detected yet.</small></h1>
+                                <a t-att-href="'/web'"
+                                    class="btn btn-lg btn-primary btn-raised">
+                                    <i class="material-icons">create_new_folder</i><br/>Create your first one!
+                                </a>
+                            </div>
+                        </div>
                     </t>
                 </t>
             </xpath>
