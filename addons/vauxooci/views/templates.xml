@@ -205,27 +205,21 @@
           </t>
         </template>
         <template id="vauxooci.login_menu" name="Dropdown for repositories">
-            <div class="btn-group login">
-                <a href="#" class="btn btn-fab btn-info dropdown-toggle" data-toggle="dropdown">
-                    <!-- TODO: unwire this url to the user one.
-                         -->
+            <t t-if="website.user_id == user_id">
+                <a t-attf-href="/web/login?redirect=/" class="btn btn-fab btn-info">
+                    <i class="material-icons">person_outline</i>
+                </a>
+            </t>
+            <t t-if="website.user_id != user_id">
+                <a href="#" class="btn btn-fab btn-info" t-att-title="user_id.name">
                     <img src="http://www.androidslots.co.uk/images/Example-of-an-avatar-illustration-297x300.png"
                         class="circle"/>
                 </a>
-                <ul class="dropdown-menu">
-                    <li class="dropdown" t-ignore="true" t-if="website.user_id != user_id">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <b>
-                                <span t-esc="(len(user_id.name)&gt;25) and (user_id.name[:23]+'...') or user_id.name"/>
-                                <span class="caret"></span>
-                            </b>
-                        </a>
-                        <ul class="dropdown-menu js_usermenu" role="menu">
-                            <li id="o_logout"><a t-attf-href="/web/session/logout?redirect=/" role="menuitem">Logout</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
+                <a t-attf-href="/web/session/logout?redirect=/" class="btn btn-fab btn-info"
+                    title="Logout">
+                    <i class="material-icons">exit_to_app</i>
+                </a>
+            </t>
         </template>
         <template id="vauxooci.dropdown_repositories" name="Dropdown for repositories">
             <div class="btn-group">
@@ -488,9 +482,9 @@
                         </div>
                         <div class="text-center main-group">
                             <t t-call="vauxooci.about"/>
-                            <t t-call="vauxooci.login_menu"/>
                             <t t-call="vauxooci.dropdown_repositories"/>
                             <t t-call="vauxooci.expand_all"/>
+                            <t t-call="vauxooci.login_menu"/>
                         </div>
                         <!-- Class just for styling.
                              -->

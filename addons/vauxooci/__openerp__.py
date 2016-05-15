@@ -9,6 +9,7 @@
     'application': True,
     'depends': [
         'mail',
+        'website_portal',
         'runbot_travis2docker',
         'theme_material',
     ],
@@ -16,6 +17,7 @@
         'views/assets.xml',
         'views/layout.xml',
         'views/templates.xml',
+        'views/views.xml',
     ],
     'demo': [
         'demo/demo.xml',
