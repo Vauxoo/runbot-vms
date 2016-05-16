@@ -54,7 +54,6 @@
             <t t-if="bu['state'] in ['running'] and bu['result'] == 'killed'"><t t-set="klass">killed</t></t>
             <div class="btn-background">
             <div class="btn-group btn-group-lg">
-                <a href="#" t-attf-class="btn btn-default close"><i class="material-icons">close</i></a>
                 <t t-if="bu['state']=='running'">
                     <a class="btn btn-primary  " t-attf-href="http://{{bu['domain']}}/"
                         title="Test the `select database` feature"><i class="material-icons">ondemand_video</i></a>
@@ -86,9 +85,10 @@
                 <t t-if="bu['result']!='skipped' and bu['state']!='done'">
                     <a href="#" class="runbot-force-kill btn btn-primary  " title="Delete completaly the build"><i class="material-icons">delete_forever</i></a>
                 </t>
-                <a type="button" class="btn btn-fab btn-info" data-toggle="modal" href="#" data-target="#info_build">
+                <a type="button" class="btn btn-info" data-toggle="modal" href="#" data-target="#info_build">
                     <i class="material-icons">info</i>
                 </a>
+                <a href="#" t-attf-class="btn btn-default close"><i class="material-icons">close</i></a>
                 <div class="modal" id="info_build">
                   <div class="modal-dialog">
                     <div class="modal-content">
@@ -97,15 +97,27 @@
                         <h4 class="modal-title">Instance Introspection</h4>
                       </div>
                       <div class="modal-body">
-                        <pre>
-                            <code>{
-                                <t t-raw="introspection_html"/>
-                            }</code>
-                        </pre>
+                          <table class="table table-condensed">
+                            <thead>
+                                <th>Info</th>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="introspection_html" t-as="element">
+                                    <td>
+                                    <t t-foreach="element['info']" t-as="key">
+                                    <div>
+                                        <span><b><t t-esc="key"/> </b><t t-esc="element['info'][key]"/></span>
+                                    </div>
+                                    </t>
+                                    </td>
+                                </tr>
+                            </tbody>
+                          </table>
                       </div>
                       <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Download</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal"><i class="material-icons">close</i></button>
+                        <a type="button" class="btn btn-primary" t-att-href="'http://'+bu['domain']+'/instance_introspection'"><i class="material-icons">pageview</i></a>
+                        <a type="button" class="btn btn-primary" t-att-href="'http://'+bu['domain']+'/instance_introspection.json'"><i class="material-icons">code</i></a>
                       </div>
                     </div>
                   </div>
