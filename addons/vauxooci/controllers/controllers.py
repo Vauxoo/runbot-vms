@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+import json
+import requests
+
 from openerp import http
 from openerp.http import request
 
@@ -35,6 +38,12 @@ class RunbotButtons(http.Controller):
             'server_match': real_build.server_match,
         }
 
+    def build_html(self, build):
+        print build.host
+        print build.domain
+        response = requests.get('http://%s/instance_introspection.json' % build.domain)
+        return response.json()
+
     @http.route(['/vauxooci/build_button/<build_id>'], type='http', auth="public", website=True)
     def build(self, build_id=None, search=None, **post):
         registry, cr, uid, context = request.registry, request.cr, request.uid, request.context
@@ -46,7 +55,7 @@ class RunbotButtons(http.Controller):
             return request.not_found()
         context = {
             'introspection': build.introspection,
-            'introspection_html': build.introspection_html,
+            'introspection_html': self.build_html(build),
             'repo': build.repo_id,
             'bu': self.build_info(build),
             'br': {'branch': build.branch_id},
