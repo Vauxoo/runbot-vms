@@ -86,6 +86,30 @@
                 <t t-if="bu['result']!='skipped' and bu['state']!='done'">
                     <a href="#" class="runbot-force-kill btn btn-primary  " title="Delete completaly the build"><i class="material-icons">delete_forever</i></a>
                 </t>
+                <a type="button" class="btn btn-fab btn-info" data-toggle="modal" href="#" data-target="#info_build">
+                    <i class="material-icons">info</i>
+                </a>
+                <div class="modal" id="info_build">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Instance Introspection</h4>
+                      </div>
+                      <div class="modal-body">
+                        <pre>
+                            <code>{
+                                <t t-raw="introspection_html"/>
+                            }</code>
+                        </pre>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Download</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
             </div>
             </div>
         </template>

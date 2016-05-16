@@ -45,6 +45,8 @@ class RunbotButtons(http.Controller):
         if not build.exists():
             return request.not_found()
         context = {
+            'introspection': build.introspection,
+            'introspection_html': build.introspection_html,
             'repo': build.repo_id,
             'bu': self.build_info(build),
             'br': {'branch': build.branch_id},
