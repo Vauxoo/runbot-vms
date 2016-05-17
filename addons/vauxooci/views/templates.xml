@@ -367,63 +367,36 @@
         </template>
         <template id="vauxooci.build_row_md" name="Row Header">
             <div class="last-build hidden-xs">
-            <div t-attf-class="row {{klass_p}}" style="border-bottom: 1px solid #ccc; padding-bottom: 0px">
-                <div class="col-md-4 col-xs-12">
+            <div t-attf-class="row {{klass_p}}" style="border-top: 1px solid #ccc; padding-bottom: 0px">
+                <div class="col-md-2 text-center">
+                    <label t-attf-class="label label-{{klass_p}}">
+                        <span><t t-esc="br['branch'].branch_name"/></span>
+                    </label>
+                </div>
+                <div class="col-md-8">
                     <span>
-                            <label t-attf-class="label label-{{klass_p}}">
-                            <i t-if="not br['branch'].sticky" class="material-icons">call_merge</i>
-                            <i t-if="br['branch'].sticky" class="material-icons" style="color: #f0ad4e">star</i>
-                            <t t-esc="br['branch'].branch_name"/>
-                            <t t-esc="br['builds'][0]['job_time']"/> - <t t-esc="br['builds'][0]['job_age']"/>
-                            <t t-esc="br['builds'][0]['state']"/></label> and It was
-                            authored by: <a href="#" t-id="br['builds'][0]['author']"><t t-esc="br['builds'][0]['author']"/></a>
+                        <label t-attf-class="label label-{{klass_p}}">
+                        <i t-if="not br['branch'].sticky" class="material-icons">call_merge</i>
+                        <i t-if="br['branch'].sticky" class="material-icons" style="color: #f0ad4e">star</i>
+                        <t t-if="br['builds'][0]['committer'] and br['branch'].sticky and br['builds'][0]['author'] == br['builds'][0]['committer']">
+                            <span class="badge" title="Not good, author and commiter is the same, this should be reiviewed by somebody else.">
+                                <i class="material-icons">sentiment_very_dissatisfied</i>
+                            </span>
+                        </t>
+                        <t t-esc="br['builds'][0]['job_time']"/> - <t t-esc="br['builds'][0]['job_age']"/>
+                        <t t-esc="br['builds'][0]['state']"/></label> and It was
+                        authored by: <a href="#" t-id="br['builds'][0]['author']"><t t-esc="br['builds'][0]['author']"/></a>
                         <t t-if="br['builds'][0]['committer'] and br['builds'][0]['author'] != br['builds'][0]['committer']">
                             and committed by: <a href="#" t-id="bu['committer']"><t t-esc="br['builds'][0]['committer']"/></a>
                             <label class="label label-success">
                                 <i class="material-icons">sentiment_very_satisfied</i>
                             </label>
                         </t>
-                    </span>
-                        <t t-if="br['builds'][0]['committer'] and br['branch'].sticky and br['builds'][0]['author'] == br['builds'][0]['committer']">
-                            <span class="label label-warning" title="Not good, author and commiter is the same, this should be reiviewed by somebody else.">
-                                <i class="material-icons">sentiment_very_dissatisfied</i>
-                            </span>
-                        </t><br/>
-                    <span>
-                        <b>Subject:</b> <t t-esc="br['builds'][0]['subject']"/>
+                        <b> Subject: </b> <t t-esc="br['builds'][0]['subject']"/>
                     </span>
                 </div>
-                <div class="col-md-8 col-xs-12">
+                <div class="col-md-1">
                     <div class="btn-group-justified btn-group">
-                        <a t-attf-class="btn btn-default btn-{{klass_p}} {{button_active_klass_p}}"
-                            target="_new"
-                            t-attf-href="/runbot/#{repo.id}/#{br['branch'].branch_name}"
-                            title="Quick Connect last built">
-                            <i class="material-icons">open_in_new</i>
-                        </a>
-                        <a class="btn btn-default"
-                            t-attf-href="{{br['branch'].branch_url}}"
-                            target="_new"
-                            title="Branch where this source code is pulled from">
-                            <span>Code Review </span>
-                            <i class="material-icons">rate_review</i>
-                        </a>
-                        <a class="btn btn-default" t-attf-href="/runbot/build/{{br['builds'][0]['id']}}" target="_new">
-                            <span>Build </span>
-                            <i class="material-icons">pageview</i>
-                        </a>
-                        <a class="btn btn-default" href="javascript:void(0)">
-                            <span>Logs </span>
-                            <i class="material-icons">view_list</i>
-                        </a>
-                        <a class="btn   btn-default">
-                            <span>Share </span>
-                            <i class="material-icons">share</i>
-                        </a>
-                        <a  class="btn btn-secondary vauxooci-archive">
-                            <span>Archive </span>
-                            <i class="material-icons">archive</i>
-                        </a>
                         <a class="btn btn-default vauxooci-display" href="javascript:void(0)" t-attf-data-target-id="branch{{br['branch'].id}}">
                             <i class="material-icons">keyboard_arrow_down</i>
                         </a>
