@@ -85,7 +85,7 @@
                 <t t-if="bu['result']!='skipped' and bu['state']!='done'">
                     <a href="#" class="runbot-force-kill btn btn-primary  " title="Delete completaly the build"><i class="material-icons">delete_forever</i></a>
                 </t>
-                <a type="button" class="btn btn-info" data-toggle="modal" href="#" data-target="#info_build">
+                <a type="button"  class="btn btn-info" data-toggle="modal" href="#" data-target="#info_build">
                     <i class="material-icons">info</i>
                 </a>
                 <a href="#" t-attf-class="btn btn-default close"><i class="material-icons">close</i></a>
@@ -93,8 +93,7 @@
                   <div class="modal-dialog">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title">Instance Introspection</h4>
+                        <h1 class="modal-title">Introspection</h1>
                       </div>
                       <div class="modal-body">
                           <table class="table table-condensed">
@@ -115,9 +114,9 @@
                           </table>
                       </div>
                       <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal"><i class="material-icons">close</i></button>
                         <a type="button" class="btn btn-primary" t-att-href="'http://'+bu['domain']+'/instance_introspection'"><i class="material-icons">pageview</i></a>
                         <a type="button" class="btn btn-primary" t-att-href="'http://'+bu['domain']+'/instance_introspection.json'"><i class="material-icons">code</i></a>
+                        <button type="button" class="btn btn-default" data-dismiss="modal"><i class="material-icons">close</i></button>
                       </div>
                     </div>
                   </div>
