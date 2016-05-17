@@ -367,40 +367,39 @@
         </template>
         <template id="vauxooci.build_row_md" name="Row Header">
             <div class="last-build hidden-xs">
-            <div t-attf-class="row {{klass_p}}" style="border-top: 1px solid #ccc; padding-bottom: 0px">
-                <div class="col-md-2 text-center">
-                    <label t-attf-class="label label-{{klass_p}}">
-                        <span><t t-esc="br['branch'].branch_name"/></span>
-                    </label>
-                </div>
-                <div class="col-md-8">
-                    <span>
-                        <label t-attf-class="label label-{{klass_p}}">
+            <div t-attf-class="row" style="border-top: 1px solid #ccc; padding-bottom: 0px">
+                <div t-attf-class="col-md-1 {{klass_p}} text-center">
+                    <div class="vauxooci-display" t-attf-data-target-id="branch{{br['branch'].id}}">
                         <i t-if="not br['branch'].sticky" class="material-icons">call_merge</i>
                         <i t-if="br['branch'].sticky" class="material-icons" style="color: #f0ad4e">star</i>
-                        <t t-if="br['builds'][0]['committer'] and br['branch'].sticky and br['builds'][0]['author'] == br['builds'][0]['committer']">
-                            <span class="badge" title="Not good, author and commiter is the same, this should be reiviewed by somebody else.">
-                                <i class="material-icons">sentiment_very_dissatisfied</i>
-                            </span>
-                        </t>
+                        <i class="material-icons">keyboard_arrow_down</i>
+                    </div>
+                </div>
+                <div t-attf-class="col-md-2 {{klass_p}} text-center">
+                    <div>
+                        <span><i t-if="klass_p == 'success'" class="material-icons">check</i>
+                        <i t-if="klass_p != 'success'" class="material-icons">broken_image</i>
+                        <t t-esc="br['branch'].branch_name"/></span>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <span>
+                        <b> Subject: </b> <t t-esc="br['builds'][0]['subject']"/>;
                         <t t-esc="br['builds'][0]['job_time']"/> - <t t-esc="br['builds'][0]['job_age']"/>
-                        <t t-esc="br['builds'][0]['state']"/></label> and It was
+                        <t t-esc="br['builds'][0]['state']"/> and It was
                         authored by: <a href="#" t-id="br['builds'][0]['author']"><t t-esc="br['builds'][0]['author']"/></a>
                         <t t-if="br['builds'][0]['committer'] and br['builds'][0]['author'] != br['builds'][0]['committer']">
                             and committed by: <a href="#" t-id="bu['committer']"><t t-esc="br['builds'][0]['committer']"/></a>
-                            <label class="label label-success">
+                            <label class="badge">
                                 <i class="material-icons">sentiment_very_satisfied</i>
                             </label>
                         </t>
-                        <b> Subject: </b> <t t-esc="br['builds'][0]['subject']"/>
+                        <t t-if="br['builds'][0]['committer'] and br['branch'].sticky and br['builds'][0]['author'] == br['builds'][0]['committer']">
+                            <span class="badge" title="Not good, author and commiter is the same, this should be reviewed by somebody else, check in deplpoy please.">
+                                <i class="material-icons">sentiment_very_dissatisfied</i>
+                            </span>
+                        </t>
                     </span>
-                </div>
-                <div class="col-md-1">
-                    <div class="btn-group-justified btn-group">
-                        <a class="btn btn-default vauxooci-display" href="javascript:void(0)" t-attf-data-target-id="branch{{br['branch'].id}}">
-                            <i class="material-icons">keyboard_arrow_down</i>
-                        </a>
-                    </div>
                 </div>
             </div>
             </div>
