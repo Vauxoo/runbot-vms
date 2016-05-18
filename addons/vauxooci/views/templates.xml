@@ -256,17 +256,37 @@
                 </a>
             </t>
         </template>
-        <template id="vauxooci.dropdown_repositories" name="Dropdown for repositories">
+        <template id="vauxooci.repositories_body" name="Dropdown for repositories">
+            <div class="modal fade" id="pick_repository" tabindex="-1" role="dialog" aria-labelledby="title_pick_repository">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span></button>
+                            <h4 class="modal-title" id="title_pick_repository">Pick a Repository</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="list-group">
+                                <t t-foreach='repos' t-as='re'>
+                                    <a class="list-group-item"
+                                        t-attf-href="/runbot/repo/{{slug(re)}}">
+                                        <i class="material-icons">golf_course</i>
+                                        <b t-esc="re.alias_name"/>:<br/>
+                                        <small t-esc="re.base"/>
+                                    </a>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <template id="vauxooci.modal_repositories" name="Modal repository">
             <div class="btn-group">
-                <a href="#" class="btn btn-fab btn-info dropdown-toggle" data-toggle="dropdown">
+                <a href="#" class="btn btn-fab" data-target="#pick_repository" data-toggle="modal">
                     <i class="material-icons">more_vert</i>
                 </a>
-                <ul class="dropdown-menu">
-                    <t t-foreach='repos' t-as='re'>
-                        <li><a t-attf-href="/runbot/repo/{{slug(re)}}"><t t-esc="re.base"/></a></li>
-                    </t>
-                </ul>
             </div>
+            <t t-call="vauxooci.repositories_body"/>
         </template>
         <template id="vauxooci.info_modal" name="Info">
             <div class="modal fade" id="info_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -490,7 +510,7 @@
                         </div>
                         <div class="text-center main-group">
                             <t t-call="vauxooci.about"/>
-                            <t t-call="vauxooci.dropdown_repositories"/>
+                            <t t-call="vauxooci.modal_repositories"/>
                             <t t-call="vauxooci.expand_all"/>
                             <t t-call="vauxooci.login_menu"/>
                         </div>
