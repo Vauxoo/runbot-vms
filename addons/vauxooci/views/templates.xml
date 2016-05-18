@@ -452,7 +452,7 @@
         </template>
         <template id="vauxooci.expand_all" name="Info">
             <div class="btn-group">
-                <a type="button" class="btn btn-fab btn-info" data-toggle="modal" title="Expand all builds." href="#" data-target="#info_modal">
+                <a type="button" class="btn btn-fab btn-info expand-all">
                     <i class="material-icons">expand_more</i>
                 </a>
             </div>

@@ -20,6 +20,9 @@
             }
             $('#'+$(this).data('target-id')).addClass('hidden');
         });
+        $('.expand-all').click(function() {
+            $(".vauxooci-display").trigger("click");
+        });
         $('.build-card').click(function(e) {
             var self = $(this),
                 x = e.pageX,
