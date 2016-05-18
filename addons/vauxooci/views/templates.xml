@@ -483,7 +483,8 @@
                         <div class="jumbotron">
                             <div class="container">
                                 <h2 class="text-left">
-                                    Nice Alias<br/><small class="hidden-xs"><t t-esc="repo.name"/></small>
+                                    <t t-esc="repo.alias_name"/>
+                                    <br/><small class="hidden-xs"><t t-esc="repo.name"/></small>
                                 </h2>
                             </div>
                         </div>

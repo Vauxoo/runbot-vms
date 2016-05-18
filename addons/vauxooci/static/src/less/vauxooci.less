@@ -40,7 +40,66 @@ body.vauxooci {
 
 .vauxooci {
 //Colors:
+    .row {
+        &.primary {
+            background-color: @brand-primary;
+            color: @white;
+            vertical-align: middle;
+            border: 1px solid @white;
+            a {
+                color: white;
+                font-weight: 400;
+            }
+        }
+        &.success {
+            background-color: @brand-success;
+            color: @white;
+            vertical-align: middle;
+            border: 1px solid @white;
+            a {
+                color: white;
+                font-weight: 400;
+            }
+        }
+        &.danger {
+            background-color: @brand-danger;
+            color: @white;
+            vertical-align: middle;
+            border: 1px solid @white;
+            a {
+                color: white;
+                font-weight: 400;
+            }
+        }
+        &.warning {
+            background-color: @brand-warning;
+            color: @white;
+            vertical-align: middle;
+            border: 1px solid @white;
+            a {
+                color: white;
+                font-weight: 400;
+            }
+        }
+        &.info {
+            background-color: @brand-info;
+            color: @white;
+            vertical-align: middle;
+            border: 1px solid @white;
+            a {
+                color: white;
+                font-weight: 300;
+            }
+        }
+    }
     .row [class*="col-"] {
+        .vauxooci-display {
+            &:hover {
+                opacity: 0.8;
+                cursor: hand;
+                cursor: pointer;
+            }
+        }
         &.primary {
             background-color: @brand-primary;
             color: @white;

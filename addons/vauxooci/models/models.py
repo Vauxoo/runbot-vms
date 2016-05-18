@@ -2,10 +2,10 @@
 
 from openerp import models, fields, api
 
-# class runbot_frontend(models.Model):
-#     _name = 'runbot_frontend.runbot_frontend'
+class RunbotBuild(models.Model):
+    _inherit = 'runbot.repo'
 
-#     name = fields.Char()
+    alias_name = fields.Char()
 #     value = fields.Integer()
 #     value2 = fields.Float(compute="_value_pc", store=True)
 #     description = fields.Text()
