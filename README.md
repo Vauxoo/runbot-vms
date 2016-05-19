@@ -1,29 +1,26 @@
-
-*****Version**=0.0.2
-
-Our Runbot Instance configuration files for deployments... (No Source here review the readme)
-
-TODO: MOVE THIS CONFIGURATION STEPS TO ANSIBLE.
-
-How to install runbot_travis2docker module from scratch
+Version=9.0.0.0.4
 ---
 
-1. Install docker
+Our Runbot Instance configuration files for deployments... (No Source here
+review the readme)
+
+This installation instructions are to be done inside a blank Ubuntu 14.04
+machine it is not pretending to be done in an existent instance.
+
+# Runbot instance with runbot docker based.
+
+1. Install [docker](https://docs.docker.com/engine/installation/linux/ubuntulinux/).
 2. Create OS "runbot" user.
 
-```bash
+  ```bash
   useradd -d /home/runbot -m -s /bin/bash -p runbotpwd runbot && usermod -aG docker runbot
   su - runbot
-```
+  ```
 
-3. Clone all repositories
+3. Clone this repository (it will take a while depending of your internet connection).
 
   ```bash
-  # Run as runbot user:
-  mkdir -p ~/instance
-  git clone https://github.com/Vauxoo/runbot-addons.git -b 9.0 ~/instance/dependencies/runbot-addons
-  git clone https://github.com/Vauxoo/odoo-extra.git -b 9.0 ~/instance/dependencies/odoo-extra
-  git clone https://github.com/odoo/odoo.git -b 9.0 ~/instance/odoo
+  git clone --recursive https://github.com/Vauxoo/runbot -b 9.0 ~/instance
   ```
 
 4. As root install dependencies apt and pip packages
@@ -54,52 +51,70 @@ How to install runbot_travis2docker module from scratch
     && echo 'LANG="en_US.UTF-8"' > /etc/default/locale
   ```
 
-5. As root user install and configure postgresql
+5. You can use your own postgres as normal, this step is if you decide install
+   runbot in your virtual machine to be separated from your environment.
 
-  ```bash
-  apt-get install -y postgresql-9.3 postgresql-contrib-9.3 postgresql-common postgresql-server-dev-9.3
-  su - postgres -c "psql -c  \"CREATE ROLE runbot LOGIN PASSWORD 'runbotpwd' SUPERUSER INHERIT CREATEDB CREATEROLE;\""
-  
-  # Run as runbot user:
-  createdb runbot
-  ```
+  a. Inside the same machine from scratch.
+
+    ```bash
+    apt-get install -y postgresql-9.3 postgresql-contrib-9.3 postgresql-common postgresql-server-dev-9.3
+    su - postgres -c "psql -c  \"CREATE ROLE runbot LOGIN PASSWORD 'runbotpwd' SUPERUSER INHERIT CREATEDB CREATEROLE;\""
+    createdb runbot
+    ```
 
 6. As runbot user configure odoo and start it
 
+  TODO: Config File should come from a configurator.
   ```bash
   echo -e "[options]\naddons_path=${HOME}/instance/dependencies/runbot-addons,\n    ${HOME}/instance/dependencies/odoo-extra,\n    ${HOME}/instance/odoo/addons,\n    ${HOME}/instance/odoo/openerp/addons\ndb_name = runbot\ndbfilter = runbot" | tee -a ~/.openerp_serverrc
-  ~/instance/odoo/odoo.py -i runbot_travis2docker --without-demo=all
   ```
 
 7. Configure nginx, dns and host
 
- - Create follow site configuration `/etc/nginx/sites-enabled/site-runbot.conf`
+  a. Create follow site configuration 
+  `/etc/nginx/sites-enabled/site-runbot.conf`
 
   ```
-  upstream runbot {
-      server 127.0.0.2:8080 weight=1 max_fails=3 fail_timeout=200m;
-  }
-  server {
-      listen 80;
-      server_name ~^(.*)\.runbot\.YOUR_DNS_HOST\.com$ runbot.YOUR_DNS_HOST.com;
-      location / {
-          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-          proxy_set_header Host $host;
-          send_timeout 200m;
-          proxy_read_timeout 200m;
-          proxy_connect_timeout 200m;
-          proxy_pass    http://runbot;
-      }
-  }
+	upstream runbot {
+		server 127.0.0.1:8069 weight=1 max_fails=3 fail_timeout=200m;
+	}
+	server {
+		listen 80;
+		server_name runbot.example.com;
+		location / {
+			proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+			proxy_set_header Host $host;
+			send_timeout 200m;
+			proxy_read_timeout 200m;
+			proxy_connect_timeout 200m;
+			proxy_pass    http://runbot;
+		}
+	}
+
+	upstream runbot_instances {
+		server 127.0.0.1:8080 weight=1 max_fails=3 fail_timeout=200m;
+	}
+	server {
+		listen 80;
+		server_name ~^(.*)\.runbot\.vauxoo\.colima$;
+		location / {
+			proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+			proxy_set_header Host $host;
+			send_timeout 200m;
+			proxy_read_timeout 200m;
+			proxy_connect_timeout 200m;
+			proxy_pass    http://runbot_instances;
+		}
+	}
   ```
 
-  - Restart nginx server to load new site configuration
+  b. Restart nginx server to load new site configuration
 
   ```
   /etc/init.d/nginx restart
   ```
 
-  - Set the dns as hostname
+  c. Set the dns as hostname
 
   ```
   runbot.YOUR_DNS_HOST.com > /etc/hostname` or  `hostnamectl set-hostname runbot.YOUR_DNS_HOST.com`
@@ -107,9 +122,9 @@ How to install runbot_travis2docker module from scratch
 
 8. Configure ssh keys
 
- - Github require  `/home/runbot/.ssh/id_rsa` keys to clone private repositories more info
+  a.  Github requires  `/home/runbot/.ssh/id_rsa` keys to clone private repositories more info
    [here](https://help.github.com/articles/generating-an-ssh-key/)
- - Add to known hosts git servers
+  b. Add to known hosts git servers
 
   ```
   ssh-keyscan github.com > ${HOME}/.ssh/known_hosts && ssh-keyscan launchpad.net >> ${HOME}/.ssh/known_hosts && ssh-keyscan bitbucket.org >> ${HOME}/.ssh/known_hosts && ssh-keyscan gitlab.com >> ${HOME}/.ssh/known_hosts
@@ -130,3 +145,47 @@ How to install runbot_travis2docker module from scratch
 11. Configure setting of runbot
 
   - Open in browser http://YOUR_DNS/web and go to menu:settings/runbot and set your values.
+
+12. Configuring your first repository.
+
+  - The repository should look like this one:
+
+  - ![](http://screenshots.vauxoo.com/oem/fc1fe0-1042x619.png)
+
+13. Create your runbot ssh keys.
+
+14. Set your key public in github.
+
+# Running developer mode:.
+  
+  ```bash
+  $ ~/instance/odoo/odoo.py -i runbot_travis2docker --without-demo=all
+
+  ```
+
+# Running as a service mode:.
+
+  - TODO: Running with supervisord.
+
+# To work in an existent db for developers.
+
+  - Mark as disabled all repositories (tip, download a csv and import it
+    again).
+  - Actualizar a un token read todo, y no a un token write.
+  - Cambiar los workers.
+  - Si es necesaro revisa el puerto start para que sea por encima del puerto en
+    el que estás corriendo Odoo.
+  - Cambiar a tu dominio local.
+  - Ahora SI puedes activar el cron dentro de cualquier repo para que lance
+    TODOS.
+
+Updating from an old version:
+
+# Planned New Features::
+
+  - Notas mentales para Mejoras.
+    - job_10_test_base.txt -> docker build
+    - job_20_test_all.txt -> docker run
+      - Este es: el primer build que tenga El primer build que tenga "TESTS=1" en su dockerfile
+    - job_30_test_run.txt -> docker start (keep alive docker de mierda)
+  - Con data: https://github.com/vauxoo-dev/runbot_branch_remote_name_grp_feature2

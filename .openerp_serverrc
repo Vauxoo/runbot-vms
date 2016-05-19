@@ -1,0 +1,11 @@
+[options]
+addons_path=/home/runbot/runbot-addons,
+    /home/runbot/odoo-extra,
+    /home/runbot/odoo/addons,
+    /home/runbot/instance,
+    /home/runbot/odoo-material
+db_name = runbot
+db_host = 10.10.10.20
+db_user = runbot
+db_password = runbotpwd
+dbfilter = runbot

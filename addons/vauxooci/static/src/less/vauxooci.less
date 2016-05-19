@@ -1,0 +1,329 @@
+@white: #ffffff; @rgb-white: "255,255,255";
+@black: #000000; @rgb-black: "0,0,0";
+@mdb-text-color-light:  ~"rgba(@{rgb-white}, 0.84)";
+@mdb-text-color-light-hex: @white; // for contrast function in inverse
+@mdb-text-color-primary: ~"rgba(@{rgb-black}, 0.87)";
+@mdb-text-color-primary-hex: @black; // for contrast function in inverse
+@icon-color: rgba(0,0,0,0.5);
+
+
+@mdb-label-color: ~"rgba(@{rgb-black}, 0.26)";
+@mdb-label-color-toggle-focus: ~"rgba(@{rgb-black}, .54)";
+
+// Bootstrap brand color customization
+// For future hacking;
+// https://github.com/nhomar/bootstrap-material-design/blob/master/less/_colors.less
+// That's the origin of this variables.
+
+
+@teal-500: #009688;
+@green-500: #4caf50;
+@red-500: #f44336;
+@deep-orange-500: #ff5722;
+@light-blue-500: #03a9f4;
+
+@red: @red-500;
+@green: @green-500;
+@teal: @teal-500;
+@light-blue: @light-blue-500;
+@deep-orange: @deep-orange-500;
+
+@brand-primary: @teal;
+@brand-success: @green;
+@brand-danger: @red;
+@brand-warning: @deep-orange;
+@brand-info: @light-blue;
+
+body.vauxooci {
+//    padding-top: 116px;
+}
+
+.vauxooci {
+    .list-group {
+        .list-group-item {
+            padding: 20px 20px;
+            border: 1px #665;
+        }
+    }
+//Colors:
+    .row {
+        &.primary {
+            background-color: @brand-primary;
+            color: @white;
+            vertical-align: middle;
+            border: 1px solid @white;
+            a {
+                color: white;
+                font-weight: 400;
+            }
+        }
+        &.success {
+            background-color: @brand-success;
+            color: @white;
+            vertical-align: middle;
+            border: 1px solid @white;
+            a {
+                color: white;
+                font-weight: 400;
+            }
+        }
+        &.danger {
+            background-color: @brand-danger;
+            color: @white;
+            vertical-align: middle;
+            border: 1px solid @white;
+            a {
+                color: white;
+                font-weight: 400;
+            }
+        }
+        &.warning {
+            background-color: @brand-warning;
+            color: @white;
+            vertical-align: middle;
+            border: 1px solid @white;
+            a {
+                color: white;
+                font-weight: 400;
+            }
+        }
+        &.info {
+            background-color: @brand-info;
+            color: @white;
+            vertical-align: middle;
+            border: 1px solid @white;
+            a {
+                color: white;
+                font-weight: 300;
+            }
+        }
+    }
+    .row [class*="col-"] {
+        .vauxooci-display {
+            &:hover {
+                opacity: 0.8;
+                cursor: hand;
+                cursor: pointer;
+            }
+        }
+        &.primary {
+            background-color: @brand-primary;
+            color: @white;
+            border: 1px solid @white;
+        }
+        &.success {
+            background-color: @brand-success;
+            color: @white;
+            border: 1px solid @white;
+        }
+        &.danger {
+            background-color: @brand-danger;
+            color: @white;
+            border: 1px solid @white;
+        }
+        &.warning {
+            background-color: @brand-warning;
+            color: @white;
+            border: 1px solid @white;
+        }
+        &.info {
+            background-color: @brand-info;
+            color: @white;
+            border: 1px solid @white;
+        }
+    }
+    .fixed {
+        position: fixed;
+        margin-top: -33px;
+        margin-right: 33px;
+        z-index: 5000;
+    }
+    .killed {
+        background-color: #aaa;
+    }
+    .search {
+
+    }
+    .jumbotron {
+        margin-bottom: 0px;
+    }
+    .row.search-box {
+        margin-left: 0px;
+        margin-right: 0px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    .btn-fab {
+        img {
+            display: block;
+            width: 56px;
+            height: 56px;
+        }
+    }
+    .main-group {
+        margin-top: -30px;
+    }
+    //TODO: ONLY BIG MEDIA.
+    .row.left {
+          border-right: 1px solid #ccc;
+          padding-bottom: 0px;
+    }
+    .panel-warning {
+        .panel-heading {
+            background-color: #fff3e0;
+            color: #665;
+            .btn-warning {
+            }
+        }
+    }
+    // Forcing rows of same height.
+    .label {
+        .material-icons {
+            font-size: 10px;
+        }
+    }
+    .row-full {
+        &.row {
+            display: table;
+            width: 100%;
+            margin-right: 0;
+            margin-left: 0;
+            padding: 0 0 0 0;
+        }
+        &.row {
+            [class*="col-"] {
+                float: none;
+                display: table-cell;
+                padding-left: 0px;
+                padding-right: 0px;
+                &.col-padded {
+                    padding-left: 10px;
+                    padding-right: 10px;
+                }
+                @media (max-width: @screen-xs-max) {
+                    padding-left: 10px;
+                    padding-right: 10px;
+                    &.full {
+                        padding-left: 0px;
+                        padding-right: 0px;
+                    }
+                }
+            }
+        }
+        .label {
+                text-align: center;
+            .material-icons {
+                font-size: 15px;
+                vertical-align: middle;
+            }
+            &.label-title-left {
+                font-size: 14px;
+                background-color: transparent;
+                float: left;
+                color: grey;
+                text-align: left;
+                font-weight: bold;
+                overflow-x: hidden;
+                width: 60%;
+            }
+            &.label-title-right {
+                font-size: 11px;
+                margin-right: 3px;
+                background-color: transparent;
+                float: right;
+                color: grey;
+                width: 39%;
+            }
+        }
+        div {
+            &.btn {
+                padding: 6px 6px 10px 6px;
+            }
+        }
+    }
+    .btn-group-justified {
+        margin: 0px 0 0 0;
+        .btn {
+            padding: 8px 8px;
+        }
+    }
+    .input-group-btn {
+        .btn {
+            padding: 8px 8px;
+        }
+    }
+    .jumbotron {
+          background-color:#3f51b5;
+          color: #ffffff
+    }
+    .btn-background {
+        padding: 0px;
+        background: white;
+        .btn {
+            padding-top: 10px;
+            padding-bottom: 10px;
+            padding-left: 10px;
+            padding-right: 10px;
+            &.close {
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+        }
+        .btn-group {
+            margin: 0;
+        }
+        .btn-default {
+        }
+    }
+    .build-card {
+        display: inline-block;
+        padding-top: 0px;
+        width: 100%;
+        &:hover {
+            opacity: 0.8;
+            cursor: hand;
+            cursor: pointer;
+        }
+        .build-title,
+        .build-footer,
+        .build-body {
+            padding-right: 5px;
+            padding-left: 5px;
+        }
+        .build-title {
+            height: 25%;
+            position: relative;
+            margin-top: 0;
+        }
+        .build-body {
+            height: 49%;
+        }
+        .build-footer {
+            height: 25%;
+            button, a {
+                margin: 0 !important;
+                position: relative;
+                bottom: 5px;
+                &:first-child {
+                    left: -15px;
+                }
+            }
+        }
+    }
+    pre {
+        background-color: ghostwhite;
+        border: 1px solid silver;
+        padding: 10px 20px;
+        margin: 20px;
+    }
+    .json-key {
+        color: brown;
+    }
+    .json-value {
+        color: navy;
+    }
+    .json-string {
+        color: olive;
+    }
+
+}

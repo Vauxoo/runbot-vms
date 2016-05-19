@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <template id="assets_frontend" inherit_id="website.assets_frontend" name="vauxooci.assets.frontend">
+            <xpath expr="." position="inside">
+                <link rel="stylesheet" href="/vauxooci/static/src/less/vauxooci.less"/>
+                <script type="text/javascript" src="/vauxooci/static/src/js/vauxooci.js"/>
+            </xpath>
+        </template>
+    </data>
+</openerp>
+
