@@ -3,7 +3,7 @@
     'name': "Runbot Frontend",
     'summary': """Improvements and rewrite the runbot frontend.""",
     'author': "Vaxuoo",
-    'website': "http://www.yourcompany.com",
+    'website': "http://www.vauxoo.com",
     'category': 'Runbot',
     'version': '0.1',
     'application': True,
