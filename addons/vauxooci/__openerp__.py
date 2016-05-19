@@ -5,7 +5,7 @@
     'author': "Vaxuoo",
     'website': "http://www.vauxoo.com",
     'category': 'Runbot',
-    'version': '0.1',
+    'version': '0.0.3',
     'application': True,
     'depends': [
         'mail',
