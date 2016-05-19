@@ -114,6 +114,7 @@
                           </table>
                       </div>
                       <div class="modal-footer">
+                        <a type="button" class="btn btn-default" data-dismiss="modal"><i class="material-icons">help</i></a>
                         <a type="button" class="btn btn-primary" t-att-href="'http://'+bu['domain']+'/instance_introspection'"><i class="material-icons">pageview</i></a>
                         <a type="button" class="btn btn-primary" t-att-href="'http://'+bu['domain']+'/instance_introspection.json'"><i class="material-icons">code</i></a>
                         <button type="button" class="btn btn-default" data-dismiss="modal"><i class="material-icons">close</i></button>

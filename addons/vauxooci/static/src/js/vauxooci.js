@@ -67,6 +67,8 @@
                 if (closing != 1) {
                     res.appendTo($('body'));
                 }
+            }).error(function(errorvalue){
+                 console.log(errorvalue);
             });
        });
     });

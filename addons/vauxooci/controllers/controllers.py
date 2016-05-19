@@ -39,10 +39,29 @@ class RunbotButtons(http.Controller):
         }
 
     def build_html(self, build):
-        print build.host
-        print build.domain
-        response = requests.get('http://%s/instance_introspection.json' % build.domain)
-        return response.json()
+        res = []
+        try:
+            response = requests.get('http://%s/instance_introspection.json' % build.domain,
+                                    timeout=5.00)
+            r = requests.get(url, params={'s': thing})
+            if response.status_code == requests.codes.ok:
+                res = response.json()
+        except requests.exceptions.Timeout:
+            res = [{'info': {'error': 'Timeout',
+                 'message': '''Instance is not running
+https://github.com/Vauxoo/server-tools/tree/8.0/instance_introspection
+read the help to know how configure it properlly'''}}]
+        except requests.exceptions.TooManyRedirects:
+            res = [{'info': {'error': 'TooMany redirect',
+                 'message': '''Install properly the instance_introspection:
+https://github.com/Vauxoo/server-tools/tree/8.0/instance_introspection
+read the help to know how'''}}]
+        except requests.exceptions.RequestException as e:
+            res = [{'info': {'error': 'Unknown Error',
+                 'message': '''%s''' % e.message}}]
+            # catastrophic error. bail.
+            _logger.log(e)
+        return res
 
     @http.route(['/vauxooci/build_button/<build_id>'], type='http', auth="public", website=True)
     def build(self, build_id=None, search=None, **post):
