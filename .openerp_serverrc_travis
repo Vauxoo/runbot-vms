@@ -1,0 +1,9 @@
+[options]
+addons_path=$TRAVIS_BUILD_DIR/addons
+    $TRAVIS_BUILD_DIR/odoo/openerp/addons,
+    $TRAVIS_BUILD_DIR/odoo/addons,
+    $TRAVIS_BUILD_DIR/odoo-extra,
+    $TRAVIS_BUILD_DIR/odoo-material,
+    $TRAVIS_BUILD_DIR/odoo-users,
+    $TRAVIS_BUILD_DIR/runbot-addons,
+    $TRAVIS_BUILD_DIR/server-tools,

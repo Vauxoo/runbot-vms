@@ -1,0 +1,41 @@
+language: python
+
+python:
+  - "2.7"
+
+cache: pip
+
+addons:
+  apt:
+    packages:
+      - expect-dev  # provides unbuffer utility
+      - python-dev
+      - python-lxml  # because pip installation is slow
+      - python-numpy
+      - python-simplejson
+      - python-serial
+      - python-matplotlib  # For runbot badges
+
+sudo: required  # Required for docker
+services:
+  - docker
+
+env:
+  - ODOO_CONF=${TRAVIS_BUILD_DIR}/.openerp_serverrc_travis INCLUDE="vauxooci"
+
+virtualenv:
+  system_site_packages: true
+git:
+  submodules: true
+
+install:
+  # - travis_wait docker pull vauxoo/odoo-80-image-shippable-auto
+  # - docker run --restart=always -d -p 5000:5000 --name registry registry:2
+  - sed -ri '/lxml/d' ${TRAVIS_BUILD_DIR}/*/requirements.txt
+  - find ${TRAVIS_BUILD_DIR} -type f -name requirements.txt -exec sh -c "pip install -r \"{}\"" \;
+  - npm install -g less less-plugin-clean-css
+  - pip install travis2docker simplejson  # TODO: Add this requirements.txt to runbot-addons
+
+script:
+  - ${TRAVIS_BUILD_DIR}/odoo/odoo.py --config=${ODOO_CONF} -d odoo_test --test-enable --stop-after-init -i $INCLUDE
+
