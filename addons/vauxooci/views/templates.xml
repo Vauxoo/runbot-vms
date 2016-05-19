@@ -543,6 +543,122 @@
                 </t>
             </xpath>
         </template>
+    <template id="runbot.build" name="Build Information">
+        <t t-call='vauxooci.layout'>
+            <nav class="navbar navbar-default" role="navigation">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" t-attf-href="/runbot/repo/#{ slug(repo) }"><b><t t-esc="repo.base"/></b></a>
+              <a class="navbar-brand" t-attf-href="/runbot/build/{{build['id']}}">
+                <t t-call="runbot.build_name">
+                    <t t-set="bu" t-value="build"/>
+                </t>
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <form class="navbar-form navbar-left form-inline">
+                <div class="btn-group">
+                    <t t-call="runbot.build_button">
+                        <t t-set="bu" t-value="build"/>
+                        <t t-set="bu_index" t-value="-1"/>
+                        <t t-set="klass" t-value="''"/>
+                    </t>
+                </div>
+              </form>
+              <p class="navbar-text">
+              </p>
+              <form class="navbar-form navbar-left form-inline">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    Filter <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu" role="menu">
+                    <li role="presentation" class="dropdown-header">Level</li>
+                    <li><a t-att-href="'?' + keep_query('search', 'type', level='debug')"><i t-if="level == 'debug'" class="fa fa-check"/> Debug</a></li>
+                    <li><a t-att-href="'?' + keep_query('search', 'type', level='info')"><i t-if="level == 'info'" class="fa fa-check"/> Info</a></li>
+                    <li><a t-att-href="'?' + keep_query('search', 'type', level='warning')"><i t-if="level == 'warning'" class="fa fa-check"/> Warning</a></li>
+                    <li><a t-att-href="'?' + keep_query('search', 'type', level='error')"><i t-if="level == 'error'" class="fa fa-check"/> Error</a></li>
+                    <li role="presentation" class="dropdown-header">Type</li>
+                    <li><a t-att-href="'?' + keep_query('search', 'level',type='runbot')"><i t-if="type == 'runbot'" class="fa fa-check"/> Runbot</a></li>
+                    <li><a t-att-href="'?' + keep_query('search', 'level',type='server')"><i t-if="type == 'server'" class="fa fa-check"/> Server</a></li>
+                    <li><a t-att-href="'?' + keep_query('search', 'level',type='client')"><i t-if="type == 'client'" class="fa fa-check"/> Client</a></li>
+                  </ul>
+                </div>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default">Expand</button>
+                </div>
+              </form>
+
+              <form class="navbar-form navbar-left form-inline" t-attf-action="/runbot/build/#{build['id']}/force" method='POST' t-if="request.params.get('ask_rebuild')">
+                <a href='#' class="btn btn-danger runbot-rebuild" t-attf-data-runbot-build="#{build['id']}" > <i class='fa fa-refresh'/> Force Rebuild</a>
+              </form>
+
+              <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Other builds <b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <t t-foreach='other_builds' t-as='other_build'>
+                      <li><a t-attf-href="/runbot/build/{{other_build.id}}">
+                        <t t-esc='other_build.dest'/>
+                        <t t-call="runbot.build_name">
+                          <t t-set="bu" t-value="other_build"/>
+                          <t t-set="hide_time" t-value="True"></t>
+                        </t>
+                      </a></li>
+                    </t>
+                  </ul>
+                </li>
+              </ul>
+              <form class="navbar-form navbar-right" role="search" t-attf-action="/runbot/build/{{build['id']}}" method="get">
+                <div class="form-group">
+                  <input type="search" name="search" class="form-control" placeholder="Search" t-att-value="search or ''"/>
+                  <button type="submit" class="btn btn-default">Search</button>
+                </div>
+              </form>
+            </div>
+            </nav>
+          <div class="container-fluid">
+            <div class="row" >
+                <div class="container-fluid">
+                    <h2><t t-esc="build['dest']"/><br/>
+                        <small>Subject: <t t-esc="build['subject']"/> Author: <t t-esc="build['author']"/> Committer: <t t-esc="build['committer']"/></small></h2>
+                </div>
+            </div>
+            <div class="row" >
+                <div class='col-md-12'>
+                    <p>
+
+                    </p>
+                    <table class="table table-condensed table-striped">
+                    <tr>
+                        <th>Date</th>
+                        <th>Level</th>
+                        <th>Type</th>
+                        <th>Message</th>
+                    </tr>
+                    <t t-foreach="logs" t-as="l">
+                        <tr>
+                            <td style="white-space: nowrap;"><t t-esc="l.create_date"/></td>
+                            <td><b t-esc="l.level"/></td>
+                            <td><t t-esc="l.type"/></td>
+                            <td>
+                                <a t-attf-href="https://{{repo.base}}/blob/{{build['name']}}/{{l.path}}#L{{l.line}}"><t t-esc="l.name"/>:<t t-esc="l.line"/></a> <t t-esc="l.func"/>
+                                <t t-if="'\n' not in l.message"><t t-esc="l.message"/></t>
+                                <pre t-if="'\n' in l.message" style="margin:0;padding:0; border: none;"><t t-esc="l.message"/></pre>
+                            </td>
+                        </tr>
+                    </t>
+                    </table>
+                </div>
+            </div>
+          </div>
+        </t>
+    </template>
     </data>
 </openerp>
 
