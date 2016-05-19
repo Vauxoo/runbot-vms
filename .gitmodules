@@ -1,18 +1,18 @@
 [submodule "runbot-addons"]
 	path = runbot-addons
-	url = git@github.com:Vauxoo/runbot-addons.git
+	url = https://github.com/Vauxoo/runbot-addons.git
 [submodule "odoo-extra"]
 	path = odoo-extra
-	url = git@github.com:Vauxoo/odoo-extra.git
+	url = https://github.com/Vauxoo/odoo-extra.git
 [submodule "odoo"]
 	path = odoo
-	url = git@github.com:odoo/odoo.git
+	url = https://github.com/odoo/odoo.git
 [submodule "odoo-material"]
 	path = odoo-material
-	url = git@github.com:Vauxoo/odoo-material.git
+	url = https://github.com/Vauxoo/odoo-material.git
 [submodule "server-tools"]
 	path = server-tools
-	url = git@github.com:Vauxoo/server-tools.git
+	url = https://github.com/Vauxoo/server-tools.git
 [submodule "odoo-users"]
 	path = odoo-users
-	url = git@github.com:Vauxoo/odoo-users.git
+	url = https://github.com/Vauxoo/odoo-users.git

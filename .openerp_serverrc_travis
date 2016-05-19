@@ -1,5 +1,5 @@
 [options]
-addons_path=$TRAVIS_BUILD_DIR/addons
+addons_path=$TRAVIS_BUILD_DIR/addons,
     $TRAVIS_BUILD_DIR/odoo/openerp/addons,
     $TRAVIS_BUILD_DIR/odoo/addons,
     $TRAVIS_BUILD_DIR/odoo-extra,
