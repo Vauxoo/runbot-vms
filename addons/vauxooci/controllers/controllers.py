@@ -41,9 +41,9 @@ class RunbotButtons(http.Controller):
     def build_html(self, build):
         res = []
         try:
-            response = requests.get('http://%s/instance_introspection.json' % build.domain,
+            url = 'http://%s/instance_introspection.json' % build.domain
+            response = requests.get(url,
                                     timeout=5.00)
-            r = requests.get(url, params={'s': thing})
             if response.status_code == requests.codes.ok:
                 res = response.json()
         except requests.exceptions.Timeout:
