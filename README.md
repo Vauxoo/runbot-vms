@@ -184,8 +184,13 @@ Updating from an old version:
 # Planned New Features::
 
   - Notas mentales para Mejoras.
-    - job_10_test_base.txt -> docker build
-    - job_20_test_all.txt -> docker run
       - Este es: el primer build que tenga El primer build que tenga "TESTS=1" en su dockerfile
     - job_30_test_run.txt -> docker start (keep alive docker de mierda)
-  - Con data: https://github.com/vauxoo-dev/runbot_branch_remote_name_grp_feature2
+
+Testing env:
+
+1. run odoo.py -c config_file -i vauxooci --test-enabled --stop-after-init
+2. Interpretar el Log.
+
+
+
