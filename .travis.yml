@@ -29,13 +29,13 @@ git:
   submodules: true
 
 install:
-  # - travis_wait docker pull vauxoo/odoo-80-image-shippable-auto
-  # - docker run --restart=always -d -p 5000:5000 --name registry registry:2
   - sed -ri '/lxml/d' ${TRAVIS_BUILD_DIR}/*/requirements.txt
   - find ${TRAVIS_BUILD_DIR} -type f -name requirements.txt -exec sh -c "pip install --upgrade -r \"{}\"" \;
   - npm install -g less less-plugin-clean-css
   - pip install --upgrade travis2docker simplejson matplotlib  # TODO: Add this requirements.txt to runbot-addons
 
 script:
+  - travis_wait docker pull vauxoo/odoo-80-image-shippable-auto
+  - docker run --restart=always -d -p 5000:5000 --name registry registry:2
   - ${TRAVIS_BUILD_DIR}/odoo/odoo.py --config=${ODOO_CONF} -d odoo_test --test-enable --stop-after-init -i $INCLUDE
 
