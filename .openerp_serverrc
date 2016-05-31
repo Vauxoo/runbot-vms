@@ -2,9 +2,8 @@
 addons_path=/home/runbot/instance/runbot-addons,
     /home/runbot/instance/odoo-extra,
     /home/runbot/instance/odoo/addons,
-    /home/runbot/instance/instance,
     /home/runbot/instance/odoo-material,
-    /home/runbot/instance/runbot/addons,
+    /home/runbot/instance/addons,
     /home/runbot/instance/odoo/openerp/addons
 db_name = runbot
 db_host = 10.10.10.20

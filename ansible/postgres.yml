@@ -1,0 +1,80 @@
+---
+- name: By default dont create any cluster
+  lineinfile: dest=/etc/postgresql-common/createcluster.conf regexp='^#create_main_cluster.*' line="create_main_cluster = false"
+
+- name: Install PostgreSQL
+  apt: pkg={{ item }} state=installed update_cache=yes
+  with_items:
+    - postgresql
+    - postgresql-client
+    - postgresql-contrib
+
+- name: Create main cluster
+  shell: pg_createcluster 9.5 main -e=utf8 -d=/var/lib/postgres
+
+- name: Change PostgreSQL Configuration file
+  command: cp /etc/postgresql/9.5/main/postgresql.conf /etc/postgresql/9.5/main/postgresql.conf.back
+
+- name: Optimize postgres (1)
+  lineinfile: dest=/etc/postgresql/9.5/main/postgresql.conf
+              regexp='^shared_buffers.*'
+              line='shared_buffers = 1GB'
+
+- name: Optimize postgres (2)
+  lineinfile: dest=/etc/postgresql/9.5/main/postgresql.conf
+              regexp='^#effective_cache_size.*'
+              line='effective_cache_size = 3GB'
+
+- name: Optimize postgres (3)
+  lineinfile: dest=/etc/postgresql/9.5/main/postgresql.conf
+              regexp='^#work_mem.*'
+              line='work_mem = 10485kB'
+
+- name: Optimize postgres (4)
+  lineinfile: dest=/etc/postgresql/9.5/main/postgresql.conf
+              regexp='^#maintenance_work_mem.*'
+              line='maintenance_work_mem = 256MB'
+
+- name: Optimize postgres (5)
+  lineinfile: dest=/etc/postgresql/9.5/main/postgresql.conf
+              regexp='^#min_wal_size.*'
+              line='min_wal_size = 1GB'
+
+- name: Optimize postgres (6)
+  lineinfile: dest=/etc/postgresql/9.5/main/postgresql.conf
+              regexp='^#max_wal_size.*'
+              line='max_wal_size = 2GB'
+
+- name: Optimize postgres (7)
+  lineinfile: dest=/etc/postgresql/9.5/main/postgresql.conf
+              regexp='^#checkpoint_completion_target.*'
+              line='checkpoint_completion_target = 0.7'
+
+- name: Optimize postgres (8)
+  lineinfile: dest=/etc/postgresql/9.5/main/postgresql.conf
+              regexp='^#wal_buffers.*'
+              line='wal_buffers = 16MB'
+
+- name: Optimize postgres (9)
+  lineinfile: dest=/etc/postgresql/9.5/main/postgresql.conf
+              regexp='^#default_statistics_target.*'
+              line='default_statistics_target = 100'
+
+- name: Optimize postgres (10)
+  lineinfile: dest=/etc/postgresql/9.5/main/postgresql.conf
+              regexp='^#temp_buffers.*'
+              line='temp_buffers = 32MB'
+
+
+- name: Restart PostgreSQL
+  command: systemctl restart postgresql.service
+
+- name: Add runbot user
+  become: yes
+  become_user: postgres
+  command: createuser runbot
+
+- name: Create runbot database
+  become: yes
+  become_user: postgres
+  command: createdb runbotdb -E UTF-8 -T template1 -O runbot

@@ -1,0 +1,54 @@
+---
+    - name: Clone instance
+      git: repo=https://github.com/Vauxoo/runbot
+           recursive=yes
+           dest=/home/runbot/instance
+           version=master
+           depth=1
+      become: yes
+      become_user: runbot
+
+    - name: Copy configuration file
+      copy: src=../.openerp_serverrc
+            dest=/home/runbot/
+            owner=runbot
+            group=runbot
+
+    - name: Change Odoo database configurarion
+      lineinfile: dest=/home/runbot/.openerp_serverrc
+                  regexp='^db_host.*'
+                  state=absent
+
+    - name: Change Odoo database configurarion
+      lineinfile: dest=/home/runbot/.openerp_serverrc
+                  regexp='^db_name.*'
+                  line='db_name = runbotdb'
+
+    - name: Change Odoo database configurarion
+      lineinfile: dest=/home/runbot/.openerp_serverrc
+                  regexp='^dbfilter.*'
+                  line='dbfilter = runbotdb'
+
+    - name: Change Odoo database configurarion
+      lineinfile: dest=/home/runbot/.openerp_serverrc
+                  regexp='^db_password.*'
+                  state=absent
+
+    - name: Change Odoo database configurarion
+      lineinfile: dest=/home/runbot/.openerp_serverrc
+                  regexp='^db_user.*'
+                  state=absent
+
+    - name: Delete lxml from requirements
+      lineinfile: dest=/home/runbot/instance/odoo/requirements.txt
+                  regexp='^lxml.*'
+                  state=absent
+
+    - name: Install requirement files
+      pip: requirements=/home/runbot/instance/odoo/requirements.txt
+
+    - name: Initialize database
+      command: /home/runbot/instance/odoo/odoo.py -d runbotdb -i runbot --stop-after-init
+      become: yes
+      become_user: runbot
+

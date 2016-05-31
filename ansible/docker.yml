@@ -1,0 +1,20 @@
+---
+- name: Download docker 1.11.1
+  get_url: url=https://apt.dockerproject.org/repo/pool/main/d/docker-engine/docker-engine_1.11.1-0~{{ ansible_distribution_release }}_amd64.deb dest="/tmp/docker-engine_1.11.1-0~{{ ansible_distribution_release }}_amd64.deb" mode=0440
+
+- name: Install docker
+  apt: deb="/tmp/docker-engine_1.11.1-0~{{ ansible_distribution_release }}_amd64.deb" force=yes
+
+- name: Update dns configuratios for docker (systemd)
+  ini_file: dest=/etc/systemd/system/docker.service
+            section=Service
+            option=ExecStart
+            value="/usr/bin/docker daemon --graph=/docker --dns 8.8.8.8 --dns 8.8.4.4 -H fd://"
+            backup=yes
+
+- name: Configure remote user
+  user: name=runbot groups=docker append=yes
+
+- name: Restart docker
+  shell: systemctl restart docker.service
+

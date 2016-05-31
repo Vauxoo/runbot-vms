@@ -1,0 +1,4 @@
+[runbot]
+domain.vauxoo.com ansible_sudo_pass="'123'"
+
+
