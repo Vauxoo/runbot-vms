@@ -1,0 +1,11 @@
+- name: Add optimized nginx configurarion
+  template: src=./templates/nginx.j2 dest=/etc/nginx/nginx.conf mode=0644
+
+- name: Add nginx site for runbot
+  template: src=./templates/runbot-site.j2 dest=/etc/nginx/sites-available/site-runbot.conf mode=0644
+
+- name: Create symlink
+  file: src=/etc/nginx/sites-available/site-runbot.conf dest=/etc/nginx/sites-enabled/site-runbot.conf state=link
+
+- name: Let's restart nginx
+  command: systemctl restart nginx.service

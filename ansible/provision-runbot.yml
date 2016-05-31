@@ -1,0 +1,88 @@
+- hosts: "{{ host | default('all') }}"
+  become: yes
+  become_user: root
+  vars:
+    - domain: "{{ default_domain | default('runbot.vauxoo.com') }}"
+    - domain_regex: '{{ regex_domain | default("~^(.*)\.runbot\.vauxoo\.com$") }}'
+  tasks:
+
+    - name: Asume yes to all
+      lineinfile: dest=/etc/apt/apt.conf.d/01vauxoo line='Apt::Get::Assume-Yes "true";' create=yes state=present
+
+    - name: Allow unauthenticated
+      lineinfile: dest=/etc/apt/apt.conf.d/01vauxoo line='Apt::Get::AllowUnauthenticated "true";'
+
+    - name: Check for the Nodejs repo key
+      apt_key: url=https://deb.nodesource.com/gpgkey/nodesource.gpg.key state=present
+
+    - name: Check for the Nodejs repo
+      apt_repository: repo='deb https://deb.nodesource.com/node_4.x trusty main' state=present
+
+    - name: Check for the Nodejs src repo
+      apt_repository: repo='deb-src https://deb.nodesource.com/node_4.x trusty main' state=present
+
+    - name: Update packages cache
+      command: apt-get update
+
+    - name: Install aptitude
+      command: apt-get install aptitude -y
+
+    - name: Update package list and upgrade system
+      apt: update_cache=yes upgrade=yes
+
+    - name: Check for required system packages
+      apt: pkg={{ item }} state=installed
+      with_items:
+        - build-essential
+        - python-setuptools
+        - python-dev
+        - libyaml-dev
+        - htop
+        - lsof
+        - ntp
+        - git
+        - libpq-dev
+        - libffi-dev
+        - libssl-dev
+        - libsasl2-dev
+        - libldap2-dev
+        - libjpeg-dev
+        - mosh
+        - nginx
+        - libltdl7
+        - python-software-properties
+        - software-properties-common
+        - postgresql-common
+        - python-psycopg2
+        - nodejs
+        - python-lxml
+        - python-matplotlib
+        - libguestfs-jfs
+        - module-init-tools
+        - jfsutils
+
+    - name: Check for PIP
+      easy_install: name=pip
+
+    - name: Check for required Python packages
+      pip: name={{ item }}
+      with_items:
+        - docker-py
+        - ansible
+        - ConfigParser
+        - travis2docker
+        - simplejson
+
+    - name: Install less and plugins
+      npm: name={{ item }} global=yes
+      with_items:
+        - less
+        - less-plugin-clean-css
+
+    - include: docker.yml
+
+    - include: nginx.yml
+
+    - include: postgres.yml
+
+    - include: instance.yml
