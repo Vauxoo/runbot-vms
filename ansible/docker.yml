@@ -12,6 +12,13 @@
             value="/usr/bin/docker daemon --graph=/docker --dns 8.8.8.8 --dns 8.8.4.4 -H fd://"
             backup=yes
 
+- name: Allow infinity tasks for docker
+  ini_file: dest=/etc/systemd/system/docker.service
+            section=Service
+            option=TasksMax
+            value="infinity"
+            backup=yes
+
 - name: Configure remote user
   user: name=runbot groups=docker append=yes
 
